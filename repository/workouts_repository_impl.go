@@ -3,6 +3,7 @@ package repository
 import (
 	"SportNotes/helper"
 	"SportNotes/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -15,8 +16,11 @@ func NewWorkoutsRepositoryImpl(Db *gorm.DB) WorkoutsRepository {
 	return &WorkoutsRepositoryImpl{Db: Db}
 }
 
-// Save implements TagsRepository
-func (t *WorkoutsRepositoryImpl) Save(tags models.Workouts) {
-	result := t.Db.Create(&tags)
+// Сохранение тренировок в БД
+func (w *WorkoutsRepositoryImpl) Save(workouts models.Workouts) {
+	result := w.Db.Create(&workouts)
 	helper.ErrorPanic(result.Error)
+
+	// возвращает айди тренировки
+	fmt.Println(workouts.Id)
 }

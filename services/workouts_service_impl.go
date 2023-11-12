@@ -21,11 +21,11 @@ func NewWorkoutsServiceImpl(WorkoutRepository repository.WorkoutsRepository, val
 	}
 }
 
-// Create implements TagsService
 func (w *WorkoutsServiceImpl) Create(workout requests.CreateWorkoutsRequest) {
 	err := w.Validate.Struct(workout)
 	helper.ErrorPanic(err)
 	workoutModel := models.Workouts{
+		Id:   workout.Id,
 		Name: workout.Name,
 	}
 	w.WorkoutsRepository.Save(workoutModel)
