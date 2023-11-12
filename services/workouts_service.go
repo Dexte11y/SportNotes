@@ -20,5 +20,5 @@ type WorkoutsService interface {
 	Update(workouts requests.UpdateWorkoutsRequest)
 
 	// Сервис по удалению тренировки
-	// Delete(workoutsId int)
+	Delete(workoutsId int)
 }

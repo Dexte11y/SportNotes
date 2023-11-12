@@ -17,5 +17,5 @@ type WorkoutsRepository interface {
 	Update(workouts models.Workouts)
 
 	// Репозиторий для удаления тренировки
-	// Delete(workoutsId int)
+	Delete(workoutsId int)
 }

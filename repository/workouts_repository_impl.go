@@ -41,7 +41,7 @@ func (w *WorkoutsRepositoryImpl) FindById(workoutsId int) (workouts models.Worko
 	if result != nil {
 		return workout, nil
 	} else {
-		return workout, errors.New("Workout is not found")
+		return workout, errors.New("workout is not found")
 	}
 }
 
@@ -52,5 +52,12 @@ func (w *WorkoutsRepositoryImpl) Update(workouts models.Workouts) {
 		Name: workouts.Name,
 	}
 	result := w.Db.Model(&workouts).Updates(updateWorkouts)
+	helper.ErrorPanic(result.Error)
+}
+
+// Удаление тренировки в БД
+func (w *WorkoutsRepositoryImpl) Delete(workoutsId int) {
+	var workouts models.Workouts
+	result := w.Db.Where("id = ?", workoutsId).Delete(&workouts)
 	helper.ErrorPanic(result.Error)
 }

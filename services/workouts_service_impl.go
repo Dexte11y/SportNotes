@@ -69,3 +69,8 @@ func (w *WorkoutsServiceImpl) FindById(workoutsId int) responses.WorkoutsRespons
 	}
 	return workoutResponse
 }
+
+// Удаление тренировки
+func (w *WorkoutsServiceImpl) Delete(workoutsId int) {
+	w.WorkoutsRepository.Delete(workoutsId)
+}

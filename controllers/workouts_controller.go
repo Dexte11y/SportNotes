@@ -92,3 +92,20 @@ func (controller *WorkoutsController) FindById(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, webResponse)
 }
+
+// Контроллер на удаление тренировки
+func (controller *WorkoutsController) Delete(c *gin.Context) {
+	log.Default().Println("Delete workouts")
+	workoutId := c.Param("workoutId")
+	id, err := strconv.Atoi(workoutId)
+	helper.ErrorPanic(err)
+	controller.workoutsService.Delete(id)
+
+	webResponse := responses.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   nil,
+	}
+	c.Header("Content-Type", "application/json")
+	c.JSON(http.StatusOK, webResponse)
+}
