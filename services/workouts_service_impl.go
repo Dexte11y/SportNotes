@@ -2,6 +2,7 @@ package services
 
 import (
 	"SportNotes/data/requests"
+	"SportNotes/data/responses"
 	"SportNotes/helper"
 	"SportNotes/models"
 	"SportNotes/repository"
@@ -21,6 +22,8 @@ func NewWorkoutsServiceImpl(WorkoutRepository repository.WorkoutsRepository, val
 	}
 }
 
+// Реализация сервиса тренировок
+// Создание тренировки
 func (w *WorkoutsServiceImpl) Create(workout requests.CreateWorkoutsRequest) {
 	err := w.Validate.Struct(workout)
 	helper.ErrorPanic(err)
@@ -29,4 +32,20 @@ func (w *WorkoutsServiceImpl) Create(workout requests.CreateWorkoutsRequest) {
 		Name: workout.Name,
 	}
 	w.WorkoutsRepository.Save(workoutModel)
+}
+
+// Поиск всех тренировок
+func (w *WorkoutsServiceImpl) FindAll() []responses.WorkoutsResponse {
+	result := w.WorkoutsRepository.FindAll()
+
+	var workouts []responses.WorkoutsResponse
+	for _, value := range result {
+		workout := responses.WorkoutsResponse{
+			Id:   value.Id,
+			Name: value.Name,
+		}
+		workouts = append(workouts, workout)
+	}
+
+	return workouts
 }

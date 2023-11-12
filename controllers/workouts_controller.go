@@ -36,3 +36,16 @@ func (controller *WorkoutsController) Create(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, webResponse)
 }
+
+func (controller *WorkoutsController) FindAll(c *gin.Context) {
+	log.Default().Println("FindAll workouts")
+	workoutResponse := controller.workoutsService.FindAll()
+	webResponse := responses.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   workoutResponse,
+	}
+	c.Header("Content-Type", "application/json")
+	c.JSON(http.StatusOK, webResponse)
+
+}

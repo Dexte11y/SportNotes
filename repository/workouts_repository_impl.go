@@ -24,3 +24,11 @@ func (w *WorkoutsRepositoryImpl) Save(workouts models.Workouts) {
 	// возвращает айди тренировки
 	fmt.Println(workouts.Id)
 }
+
+// Поиск всех тренировок из БД
+func (w *WorkoutsRepositoryImpl) FindAll() []models.Workouts {
+	var Workouts []models.Workouts
+	result := w.Db.Find(&Workouts)
+	helper.ErrorPanic(result.Error)
+	return Workouts
+}
