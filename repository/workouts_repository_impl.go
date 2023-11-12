@@ -1,9 +1,10 @@
 package repository
 
 import (
+	"SportNotes/data/requests"
 	"SportNotes/helper"
 	"SportNotes/models"
-	"fmt"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -22,7 +23,7 @@ func (w *WorkoutsRepositoryImpl) Save(workouts models.Workouts) {
 	helper.ErrorPanic(result.Error)
 
 	// возвращает айди тренировки
-	fmt.Println(workouts.Id)
+	// fmt.Println(workouts.Id)
 }
 
 // Поиск всех тренировок из БД
@@ -31,4 +32,25 @@ func (w *WorkoutsRepositoryImpl) FindAll() []models.Workouts {
 	result := w.Db.Find(&Workouts)
 	helper.ErrorPanic(result.Error)
 	return Workouts
+}
+
+// Поиск тренировки по Id в БД
+func (w *WorkoutsRepositoryImpl) FindById(workoutsId int) (workouts models.Workouts, err error) {
+	var workout models.Workouts
+	result := w.Db.Find(&workout, workoutsId)
+	if result != nil {
+		return workout, nil
+	} else {
+		return workout, errors.New("Workout is not found")
+	}
+}
+
+// Обновление тренировки в БД
+func (w *WorkoutsRepositoryImpl) Update(workouts models.Workouts) {
+	var updateWorkouts = requests.UpdateWorkoutsRequest{
+		Id:   workouts.Id,
+		Name: workouts.Name,
+	}
+	result := w.Db.Model(&workouts).Updates(updateWorkouts)
+	helper.ErrorPanic(result.Error)
 }

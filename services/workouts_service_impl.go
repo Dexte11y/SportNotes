@@ -49,3 +49,23 @@ func (w *WorkoutsServiceImpl) FindAll() []responses.WorkoutsResponse {
 
 	return workouts
 }
+
+// Обновление тренировки
+func (w *WorkoutsServiceImpl) Update(workouts requests.UpdateWorkoutsRequest) {
+	workoutData, err := w.WorkoutsRepository.FindById(workouts.Id)
+	helper.ErrorPanic(err)
+	workoutData.Name = workouts.Name
+	w.WorkoutsRepository.Update(workoutData)
+}
+
+// Поиск тренировки по Id
+func (w *WorkoutsServiceImpl) FindById(workoutsId int) responses.WorkoutsResponse {
+	workoutData, err := w.WorkoutsRepository.FindById(workoutsId)
+	helper.ErrorPanic(err)
+
+	workoutResponse := responses.WorkoutsResponse{
+		Id:   workoutData.Id,
+		Name: workoutData.Name,
+	}
+	return workoutResponse
+}

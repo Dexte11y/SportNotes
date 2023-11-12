@@ -16,8 +16,15 @@ func NewRouter(workoutsController *controllers.WorkoutsController) *gin.Engine {
 	{
 		// Получение всех тренировок
 		workoutsRouter.GET("", workoutsController.FindAll)
+
 		// Создание записи тренировки
 		workoutsRouter.POST("", workoutsController.Create)
+
+		// Поиск тренировки по Id
+		workoutsRouter.GET("/:workoutId", workoutsController.FindById)
+
+		// Изменение записи тренировки
+		workoutsRouter.PATCH("", workoutsController.Update)
 	}
 	return router
 }

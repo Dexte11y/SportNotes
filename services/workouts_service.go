@@ -13,12 +13,12 @@ type WorkoutsService interface {
 	// Сервис для поиска всех тренировок
 	FindAll() []responses.WorkoutsResponse
 
+	// Сервис для поиска тренировки по Id
+	FindById(workoutsId int) responses.WorkoutsResponse
+
 	// Сервис для обновления тренировки
-	// Update(workouts request.UpdateWorkoutsRequest)
+	Update(workouts requests.UpdateWorkoutsRequest)
 
 	// Сервис по удалению тренировки
 	// Delete(workoutsId int)
-
-	// Сервис для поиска тренировки по Id
-	// FindById(workoutsId int) response.WorkoutsResponse
 }
