@@ -21,7 +21,7 @@ func main() {
 	validate := validator.New()
 
 	db.Table("workouts").AutoMigrate(&models.Workouts{})
-
+	db.Table("users").AutoMigrate(&models.Users{})
 	// Repository
 	WorkoutsRepository := repository.NewWorkoutsRepositoryImpl(db)
 
