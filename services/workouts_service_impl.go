@@ -28,8 +28,9 @@ func (w *WorkoutsServiceImpl) Create(workout requests.CreateWorkoutsRequest) {
 	err := w.Validate.Struct(workout)
 	helper.ErrorPanic(err)
 	workoutModel := models.Workouts{
-		Id:   workout.Id,
-		Name: workout.Name,
+		Id:     workout.Id,
+		UserId: workout.UserId,
+		Date:   workout.Date,
 	}
 	w.WorkoutsRepository.Save(workoutModel)
 }
@@ -41,8 +42,9 @@ func (w *WorkoutsServiceImpl) FindAll() []responses.WorkoutsResponse {
 	var workouts []responses.WorkoutsResponse
 	for _, value := range result {
 		workout := responses.WorkoutsResponse{
-			Id:   value.Id,
-			Name: value.Name,
+			Id:     value.Id,
+			UserId: value.UserId,
+			Date:   value.Date,
 		}
 		workouts = append(workouts, workout)
 	}
@@ -51,12 +53,12 @@ func (w *WorkoutsServiceImpl) FindAll() []responses.WorkoutsResponse {
 }
 
 // Обновление тренировки
-func (w *WorkoutsServiceImpl) Update(workouts requests.UpdateWorkoutsRequest) {
-	workoutData, err := w.WorkoutsRepository.FindById(workouts.Id)
-	helper.ErrorPanic(err)
-	workoutData.Name = workouts.Name
-	w.WorkoutsRepository.Update(workoutData)
-}
+// func (w *WorkoutsServiceImpl) Update(workouts requests.UpdateWorkoutsRequest) {
+// 	workoutData, err := w.WorkoutsRepository.FindById(workouts.Id)
+// 	helper.ErrorPanic(err)
+// 	workoutData.Date = workouts.Date
+// 	w.WorkoutsRepository.Update(workoutData)
+// }
 
 // Поиск тренировки по Id
 func (w *WorkoutsServiceImpl) FindById(workoutsId int) responses.WorkoutsResponse {
@@ -64,8 +66,9 @@ func (w *WorkoutsServiceImpl) FindById(workoutsId int) responses.WorkoutsRespons
 	helper.ErrorPanic(err)
 
 	workoutResponse := responses.WorkoutsResponse{
-		Id:   workoutData.Id,
-		Name: workoutData.Name,
+		Id:     workoutData.Id,
+		UserId: workoutData.UserId,
+		Date:   workoutData.Date,
 	}
 	return workoutResponse
 }

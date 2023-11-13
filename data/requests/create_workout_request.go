@@ -1,6 +1,9 @@
 package requests
 
+import "time"
+
 type CreateWorkoutsRequest struct {
-	Id   int    `json:"id"`
-	Name string `validate:"required,min=1,max=30" json:"name"`
+	Id     int       `json:"id"`
+	UserId int       `json:"name"`
+	Date   time.Time `json:"date"`
 }

@@ -53,27 +53,27 @@ func (controller *WorkoutsController) FindAll(c *gin.Context) {
 }
 
 // Контроллер на обновление тренировки
-func (controller *WorkoutsController) Update(c *gin.Context) {
-	log.Default().Println("Update workouts")
-	updateWorkoutsRequest := requests.UpdateWorkoutsRequest{}
-	err := c.BindJSON(&updateWorkoutsRequest)
-	helper.ErrorPanic(err)
+// func (controller *WorkoutsController) Update(c *gin.Context) {
+// 	log.Default().Println("Update workouts")
+// 	updateWorkoutsRequest := requests.UpdateWorkoutsRequest{}
+// 	err := c.BindJSON(&updateWorkoutsRequest)
+// 	helper.ErrorPanic(err)
 
-	workoutId := c.Param("workoutId")
-	id, err := strconv.Atoi(workoutId)
-	helper.ErrorPanic(err)
-	updateWorkoutsRequest.Id = id
+// 	workoutId := c.Param("workoutId")
+// 	id, err := strconv.Atoi(workoutId)
+// 	helper.ErrorPanic(err)
+// 	updateWorkoutsRequest.Id = id
 
-	controller.workoutsService.Update(updateWorkoutsRequest)
+// 	controller.workoutsService.Update(updateWorkoutsRequest)
 
-	webResponse := responses.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   nil,
-	}
-	c.Header("Content-Type", "application/json")
-	c.JSON(http.StatusOK, webResponse)
-}
+// 	webResponse := responses.Response{
+// 		Code:   http.StatusOK,
+// 		Status: "Ok",
+// 		Data:   nil,
+// 	}
+// 	c.Header("Content-Type", "application/json")
+// 	c.JSON(http.StatusOK, webResponse)
+// }
 
 // Контроллер на поиск тренировки по Id
 func (controller *WorkoutsController) FindById(c *gin.Context) {

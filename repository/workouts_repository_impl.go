@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"SportNotes/data/requests"
+	// "SportNotes/data/requests"
 	"SportNotes/helper"
 	"SportNotes/models"
 	"errors"
@@ -46,14 +46,15 @@ func (w *WorkoutsRepositoryImpl) FindById(workoutsId int) (workouts models.Worko
 }
 
 // Обновление тренировки в БД
-func (w *WorkoutsRepositoryImpl) Update(workouts models.Workouts) {
-	var updateWorkouts = requests.UpdateWorkoutsRequest{
-		Id:   workouts.Id,
-		Name: workouts.Name,
-	}
-	result := w.Db.Model(&workouts).Updates(updateWorkouts)
-	helper.ErrorPanic(result.Error)
-}
+// func (w *WorkoutsRepositoryImpl) Update(workouts models.Workouts) {
+// 	var updateWorkouts = requests.UpdateWorkoutsRequest{
+// 		Id:     workouts.Id,
+// 		UserId: workouts.UserId,
+// 		Date:   workouts.Date,
+// 	}
+// 	result := w.Db.Model(&workouts).Updates(updateWorkouts)
+// 	helper.ErrorPanic(result.Error)
+// }
 
 // Удаление тренировки в БД
 func (w *WorkoutsRepositoryImpl) Delete(workoutsId int) {

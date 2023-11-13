@@ -14,7 +14,7 @@ type WorkoutsRepository interface {
 	FindById(workoutsId int) (tags models.Workouts, err error)
 
 	// Репозиторий для обновление тренировки
-	Update(workouts models.Workouts)
+	// Update(workouts models.Workouts)
 
 	// Репозиторий для удаления тренировки
 	Delete(workoutsId int)

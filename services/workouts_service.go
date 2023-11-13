@@ -17,7 +17,7 @@ type WorkoutsService interface {
 	FindById(workoutsId int) responses.WorkoutsResponse
 
 	// Сервис для обновления тренировки
-	Update(workouts requests.UpdateWorkoutsRequest)
+	// Update(workouts requests.UpdateWorkoutsRequest)
 
 	// Сервис по удалению тренировки
 	Delete(workoutsId int)
