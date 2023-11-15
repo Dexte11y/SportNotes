@@ -18,7 +18,7 @@ func NewWorkoutsRepositoryImpl(Db *gorm.DB) WorkoutsRepository {
 }
 
 // Сохранение тренировок в БД
-func (w *WorkoutsRepositoryImpl) Save(workouts models.Workouts) {
+func (w *WorkoutsRepositoryImpl) Save(workouts models.Workout) {
 	result := w.Db.Create(&workouts)
 	helper.ErrorPanic(result.Error)
 
@@ -27,16 +27,16 @@ func (w *WorkoutsRepositoryImpl) Save(workouts models.Workouts) {
 }
 
 // Поиск всех тренировок из БД
-func (w *WorkoutsRepositoryImpl) FindAll() []models.Workouts {
-	var Workouts []models.Workouts
+func (w *WorkoutsRepositoryImpl) FindAll() []models.Workout {
+	var Workouts []models.Workout
 	result := w.Db.Find(&Workouts)
 	helper.ErrorPanic(result.Error)
 	return Workouts
 }
 
 // Поиск тренировки по Id в БД
-func (w *WorkoutsRepositoryImpl) FindById(workoutsId int) (workouts models.Workouts, err error) {
-	var workout models.Workouts
+func (w *WorkoutsRepositoryImpl) FindById(workoutsId int) (workouts models.Workout, err error) {
+	var workout models.Workout
 	result := w.Db.Find(&workout, workoutsId)
 	if result != nil {
 		return workout, nil
@@ -46,7 +46,7 @@ func (w *WorkoutsRepositoryImpl) FindById(workoutsId int) (workouts models.Worko
 }
 
 // Обновление тренировки в БД
-// func (w *WorkoutsRepositoryImpl) Update(workouts models.Workouts) {
+// func (w *WorkoutsRepositoryImpl) Update(workouts models.Workout) {
 // 	var updateWorkouts = requests.UpdateWorkoutsRequest{
 // 		Id:     workouts.Id,
 // 		UserId: workouts.UserId,
@@ -58,7 +58,7 @@ func (w *WorkoutsRepositoryImpl) FindById(workoutsId int) (workouts models.Worko
 
 // Удаление тренировки в БД
 func (w *WorkoutsRepositoryImpl) Delete(workoutsId int) {
-	var workouts models.Workouts
+	var workouts models.Workout
 	result := w.Db.Where("id = ?", workoutsId).Delete(&workouts)
 	helper.ErrorPanic(result.Error)
 }

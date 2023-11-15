@@ -20,19 +20,19 @@ func main() {
 	db := database.DatabaseConnection()
 	validate := validator.New()
 
-	db.Table("workouts").AutoMigrate(&models.Workouts{})
-	db.Table("users").AutoMigrate(&models.Users{})
+	db.Table("workout").AutoMigrate(&models.Workout{})
+	db.Table("user").AutoMigrate(&models.Account{})
 	// Repository
 	WorkoutsRepository := repository.NewWorkoutsRepositoryImpl(db)
-
+	AccountsRepository := repository.NewAccountsRepositoryImpl(db)
 	// Service
 	WorkoutsService := services.NewWorkoutsServiceImpl(WorkoutsRepository, validate)
-
+	Accountservice := services.NewAccountsServiceImpl(AccountsRepository, validate)
 	// Controller
 	WorkoutsController := controllers.NewWorkoutsController(WorkoutsService)
-
+	AccountsController := controllers.NewAccountsController(Accountservice)
 	// Router
-	routes := routes.NewRouter(WorkoutsController)
+	routes := routes.NewRouter(WorkoutsController, AccountsController)
 
 	server := &http.Server{
 		Addr:    ":8888",
