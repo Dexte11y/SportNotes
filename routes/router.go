@@ -2,6 +2,7 @@ package routes
 
 import (
 	"SportNotes/controllers"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,6 +11,20 @@ func NewRouter(workoutsController *controllers.WorkoutsController, accountsContr
 	router := gin.Default()
 	// Базовый роут
 	baseRouter := router.Group("/api/v1")
+
+	// Роут для главной страницы
+	// homePage := baseRouter.Group("/home")
+	// {
+	// 	homePage.GET("", homePageController.GetHomePage)
+
+	// }
+
+	temp := baseRouter.Group("/temp")
+	{
+		temp.GET("", func(ctx *gin.Context) {
+			ctx.HTML(http.StatusOK, "index.html", nil)
+		})
+	}
 
 	// Роуты для тренировок
 	workoutsRouter := baseRouter.Group("/workouts")
@@ -30,23 +45,24 @@ func NewRouter(workoutsController *controllers.WorkoutsController, accountsContr
 		workoutsRouter.DELETE("/:workoutId", workoutsController.Delete)
 	}
 
-	// Роуты для тренировок
+	// Роуты для аккаунтов
 	accountsRouter := baseRouter.Group("/accounts")
 	{
-		// Получение всех записей о тренировках
+		// Получение всех аккаунтов
 		accountsRouter.GET("", accountsController.FindAll)
 
-		// Создание записи тренировки
+		// Создание аккаунта
 		accountsRouter.POST("", accountsController.Create)
 
-		// Поиск записи тренировки по Id
+		// Поиск аккаунта по Id
 		accountsRouter.GET("/:accountId", accountsController.FindById)
 
-		// Изменение записи тренировки
+		// Изменение аккаунта
 		// accountsRouter.PATCH("/:accountId", accountsController.Update)
 
-		// Удаление записи о тренировке
+		// Удаление аккаунта
 		accountsRouter.DELETE("/:accountsId", accountsController.Delete)
 	}
+
 	return router
 }
