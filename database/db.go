@@ -9,16 +9,26 @@ import (
 )
 
 const (
-	driver   = "postgres"
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "postgres"
-	dbName   = "sportnotes"
+	Host     = "localhost"
+	Port     = "5432"
+	User     = "postgres"
+	Password = "postgres"
+	DBName   = "sportnotes"
+	SSLMode  = "disable"
 )
 
+// type Config struct {
+// 	Host     string
+// 	Port     string
+// 	User     string
+// 	Password string
+// 	DBName   string
+// 	SSLMode  string
+// }
+
 func DatabaseConnection() *gorm.DB {
-	sqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbName)
+	sqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		Host, Port, User, Password, DBName, SSLMode)
 	db, err := gorm.Open(postgres.Open(sqlInfo), &gorm.Config{})
 	helper.ErrorPanic(err)
 
