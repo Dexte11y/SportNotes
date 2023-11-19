@@ -34,7 +34,7 @@ func main() {
 	validate := validator.New()
 
 	db.Table("workout").AutoMigrate(&models.Workout{})
-	db.Table("user").AutoMigrate(&models.Account{})
+	db.Table("account").AutoMigrate(&models.Account{})
 	// Repository
 	WorkoutsRepository := repository.NewWorkoutsRepositoryImpl(db)
 	AccountsRepository := repository.NewAccountsRepositoryImpl(db)
@@ -48,7 +48,7 @@ func main() {
 	routes := routes.NewRouter(WorkoutsController, AccountsController)
 
 	server := &http.Server{
-		Addr:    ":8888",
+		Addr:    ":8080",
 		Handler: routes,
 	}
 

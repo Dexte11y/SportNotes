@@ -1,6 +1,6 @@
 package models
 
-// Модель полей для таблицы users
+// Модель полей для таблицы accounts
 type Account struct {
 	IdAccount  int    `gorm:"type:int"`
 	Login      string `gorm:"type:varchar(255)"`
