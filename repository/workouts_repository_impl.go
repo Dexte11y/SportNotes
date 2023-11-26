@@ -1,7 +1,6 @@
 package repository
 
 import (
-	// "SportNotes/data/requests"
 	"SportNotes/helper"
 	"SportNotes/models"
 	"errors"
@@ -18,18 +17,15 @@ func NewWorkoutsRepositoryImpl(Db *gorm.DB) WorkoutsRepository {
 }
 
 // Сохранение тренировок в БД
-func (w *WorkoutsRepositoryImpl) Save(workouts models.Workout) {
-	result := w.Db.Create(&workouts)
+func (w *WorkoutsRepositoryImpl) Save(workout models.Workout) {
+	result := w.Db.Table("workout").Create(&workout)
 	helper.ErrorPanic(result.Error)
-
-	// возвращает айди тренировки
-	// fmt.Println(workouts.Id)
 }
 
 // Поиск всех тренировок из БД
 func (w *WorkoutsRepositoryImpl) FindAll() []models.Workout {
 	var Workouts []models.Workout
-	result := w.Db.Find(&Workouts)
+	result := w.Db.Table("workout").Find(&Workouts)
 	helper.ErrorPanic(result.Error)
 	return Workouts
 }
@@ -37,11 +33,11 @@ func (w *WorkoutsRepositoryImpl) FindAll() []models.Workout {
 // Поиск тренировки по Id в БД
 func (w *WorkoutsRepositoryImpl) FindById(workoutsId int) (workouts models.Workout, err error) {
 	var workout models.Workout
-	result := w.Db.Find(&workout, workoutsId)
+	result := w.Db.Table("workout").Find(&workout, workoutsId)
 	if result != nil {
 		return workout, nil
 	} else {
-		return workout, errors.New("workout is not found")
+		return workout, errors.New("тренировка не найдена")
 	}
 }
 
@@ -52,13 +48,13 @@ func (w *WorkoutsRepositoryImpl) FindById(workoutsId int) (workouts models.Worko
 // 		UserId: workouts.UserId,
 // 		Date:   workouts.Date,
 // 	}
-// 	result := w.Db.Model(&workouts).Updates(updateWorkouts)
+// result := w.Db.Table("workout").Model(&workout).Updates(updateWorkouts)
 // 	helper.ErrorPanic(result.Error)
 // }
 
 // Удаление тренировки в БД
-func (w *WorkoutsRepositoryImpl) Delete(workoutsId int) {
-	var workouts models.Workout
-	result := w.Db.Where("id = ?", workoutsId).Delete(&workouts)
+func (w *WorkoutsRepositoryImpl) Delete(workoutId int) {
+	var workout models.Workout
+	result := w.Db.Table("workout").Where("id = ?", workoutId).Delete(&workout)
 	helper.ErrorPanic(result.Error)
 }

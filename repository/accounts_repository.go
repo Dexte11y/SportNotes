@@ -7,6 +7,9 @@ type AccountsRepository interface {
 	// Репозиторий для создания аккаунта
 	Save(accounts models.Account)
 
+	// Репозиторий для авторизации аккаунта
+	Login(accounts models.Account) bool
+
 	// Репозиторий для поиска всех аккаунтов
 	FindAll() []models.Account
 

@@ -9,6 +9,8 @@ import (
 
 func NewRouter(workoutsController *controllers.WorkoutsController, accountsController *controllers.AccountsController) *gin.Engine {
 	router := gin.Default()
+	router.LoadHTMLGlob("templates/*.html")
+
 	// Базовый роут
 	baseRouter := router.Group("/api/v1")
 
@@ -21,10 +23,30 @@ func NewRouter(workoutsController *controllers.WorkoutsController, accountsContr
 
 	temp := baseRouter.Group("/temp")
 	{
-		temp.GET("", func(ctx *gin.Context) {
+		temp.GET("/home", func(ctx *gin.Context) {
 			ctx.HTML(http.StatusOK, "index.html", nil)
 		})
+
+		temp.GET("/auth", func(ctx *gin.Context) {
+			ctx.HTML(http.StatusOK, "auth.html", nil)
+		})
+
+		temp.GET("/workouts", func(ctx *gin.Context) {
+			ctx.HTML(http.StatusOK, "workout.html", nil)
+		})
 	}
+
+	// authRouter := baseRouter.Group("/auth")
+	// {
+	// authRouter.POST("/login", accountsController.Login)
+	// authRouter.POST("/register", accountsController.Register)
+	// }
+
+	// traningRouter := baseRouter.Group("/tranings")
+	// {
+	// traningRouter.GET("", workoutsController.FindAll)
+	// traningRouter.POST("", workoutsController.Create)
+	// }
 
 	// Роуты для тренировок
 	workoutsRouter := baseRouter.Group("/workouts")
@@ -51,9 +73,12 @@ func NewRouter(workoutsController *controllers.WorkoutsController, accountsContr
 		// Получение всех аккаунтов
 		accountsRouter.GET("", accountsController.FindAll)
 
-		// Создание аккаунта
-		accountsRouter.POST("", accountsController.Create)
+		// Регистрация аккаунта
+		accountsRouter.POST("/register", accountsController.Create)
 
+		// Авторизация аккаунта
+		accountsRouter.POST("/login", accountsController.Login)
+		
 		// Поиск аккаунта по Id
 		accountsRouter.GET("/:accountId", accountsController.FindById)
 

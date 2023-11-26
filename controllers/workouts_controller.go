@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"SportNotes/data/requests"
-	"SportNotes/data/responses"
 	"SportNotes/helper"
+	"SportNotes/schemas"
 	"SportNotes/services"
 	"log"
 	"net/http"
@@ -25,12 +24,12 @@ func NewWorkoutsController(service services.WorkoutsService) *WorkoutsController
 // Контроллер на создание тренировки
 func (controller *WorkoutsController) Create(c *gin.Context) {
 	log.Default().Println("Create workouts")
-	createWorkoutsRequest := requests.CreateWorkoutsRequest{}
+	createWorkoutsRequest := schemas.CreateWorkoutSchema{}
 	err := c.BindJSON(&createWorkoutsRequest)
 	helper.ErrorPanic(err)
 
 	controller.workoutsService.Create(createWorkoutsRequest)
-	webResponse := responses.Response{
+	webResponse := schemas.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
 		Data:   nil,
@@ -43,7 +42,7 @@ func (controller *WorkoutsController) Create(c *gin.Context) {
 func (controller *WorkoutsController) FindAll(c *gin.Context) {
 	log.Default().Println("FindAll workouts")
 	workoutResponse := controller.workoutsService.FindAll()
-	webResponse := responses.Response{
+	webResponse := schemas.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
 		Data:   workoutResponse,
@@ -84,7 +83,7 @@ func (controller *WorkoutsController) FindById(c *gin.Context) {
 
 	workoutResponse := controller.workoutsService.FindById(id)
 
-	webResponse := responses.Response{
+	webResponse := schemas.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
 		Data:   workoutResponse,
@@ -101,7 +100,7 @@ func (controller *WorkoutsController) Delete(c *gin.Context) {
 	helper.ErrorPanic(err)
 	controller.workoutsService.Delete(id)
 
-	webResponse := responses.Response{
+	webResponse := schemas.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
 		Data:   nil,

@@ -2,9 +2,9 @@ package models
 
 import "time"
 
-// Модель полей для таблицы workouts
+// Модель полей для таблицы workout
 type Workout struct {
-	IdWorkout int       `gorm:"type:int"`
+	Id        int       `gorm:"type:int;primary_key"`
 	IdAccount int       `gorm:"type:int"`
-	Date      time.Time `gorm:"type:date"`
+	CreatedAt time.Time `gorm:"type:date"`
 }

@@ -19,26 +19,35 @@ func NewAccountsRepositoryImpl(Db *gorm.DB) AccountsRepository {
 
 // Сохранение тренировок в БД
 func (a *AccountsRepositoryImpl) Save(accounts models.Account) {
-	result := a.Db.Create(&accounts)
+	result := a.Db.Table("account").Create(&accounts)
 	helper.ErrorPanic(result.Error)
+}
+
+// Авторизация аккаунта
+func (a *AccountsRepositoryImpl) Login(accounts models.Account) bool {
+	result := a.Db.Table("account").Where("login =? and password =?", accounts.Login, accounts.Password).First(&accounts)
+	if result.RowsAffected == 0 {
+		return false
+	}
+	return true
 }
 
 // Поиск всех тренировок из БД
 func (a *AccountsRepositoryImpl) FindAll() []models.Account {
-	var Accounts []models.Account
-	result := a.Db.Find(&Accounts)
+	var accounts []models.Account
+	result := a.Db.Table("account").Find(&accounts)
 	helper.ErrorPanic(result.Error)
-	return Accounts
+	return accounts
 }
 
 // Поиск тренировки по Id в БД
 func (a *AccountsRepositoryImpl) FindById(accountsId int) (accounts models.Account, err error) {
 	var account models.Account
-	result := a.Db.Find(&account, accountsId)
+	result := a.Db.Table("account").Find(&account, accountsId)
 	if result != nil {
 		return account, nil
 	} else {
-		return account, errors.New("account is not found")
+		return account, errors.New("аккаунт не найден")
 	}
 }
 
@@ -49,13 +58,13 @@ func (a *AccountsRepositoryImpl) FindById(accountsId int) (accounts models.Accou
 // 		UserId: workouts.UserId,
 // 		Date:   workouts.Date,
 // 	}
-// 	result := a.Db.Model(&accounts).Updates(updateAccounts)
+// 	result := a.Db.Table("account").Model(&accounts).Updates(updateAccounts)
 // 	helper.ErrorPanic(result.Error)
 // }
 
 // Удаление тренировки в БД
 func (a *AccountsRepositoryImpl) Delete(accountsId int) {
 	var accounts models.Account
-	result := a.Db.Where("id = ?", accounts).Delete(&accounts)
+	result := a.Db.Table("account").Where("id = ?", accountsId).Delete(&accounts)
 	helper.ErrorPanic(result.Error)
 }

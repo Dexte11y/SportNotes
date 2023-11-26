@@ -1,20 +1,22 @@
 package services
 
 import (
-	"SportNotes/data/requests"
-	"SportNotes/data/responses"
+	"SportNotes/schemas"
 )
 
 // Сервис аккаутнов
 type AccountsService interface {
 	// Сервис по созданию аккаунта
-	Create(accounts requests.CreateAccountsRequest)
+	Create(accounts schemas.CreateAccountSchema)
+
+	// Сервис по авторизации аккаунта
+	Login(accounts schemas.LoginAccountSchema) bool
 
 	// Сервис для поиска всех аккаунтов
-	FindAll() []responses.AccountsResponse
+	FindAll() []schemas.ResponseAccountSchema
 
 	// Сервис для поиска аккаунта по Id
-	FindById(accountsId int) responses.AccountsResponse
+	FindById(accountsId int) schemas.ResponseAccountSchema
 
 	// Сервис для обновления аккаунта
 	// Update(accounts requests.UpdateAccountsRequest)

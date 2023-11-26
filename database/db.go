@@ -2,33 +2,25 @@ package database
 
 import (
 	"SportNotes/helper"
+	"SportNotes/utils"
 	"fmt"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-const (
-	Host     = "localhost"
-	Port     = "5432"
-	User     = "postgres"
-	Password = "postgres"
-	DBName   = "sportnotes"
-	SSLMode  = "disable"
-)
-
-// type Config struct {
-// 	Host     string
-// 	Port     string
-// 	User     string
-// 	Password string
-// 	DBName   string
-// 	SSLMode  string
-// }
-
 func DatabaseConnection() *gorm.DB {
+
+	dbHost := utils.DefaultGetEnv("HOST", "")
+	dbPort := utils.DefaultGetEnv("PORT", "")
+	dbUser := utils.DefaultGetEnv("USER", "")
+	dbPassword := utils.DefaultGetEnv("PASSWORD", "")
+	dbName := utils.DefaultGetEnv("DBNAME", "")
+	dbSSLMode := utils.DefaultGetEnv("SSLMODE", "")
+
 	sqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		Host, Port, User, Password, DBName, SSLMode)
+		dbHost, dbPort, dbUser, dbPassword, dbName, dbSSLMode)
+
 	db, err := gorm.Open(postgres.Open(sqlInfo), &gorm.Config{})
 	helper.ErrorPanic(err)
 

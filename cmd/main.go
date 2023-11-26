@@ -1,6 +1,7 @@
 package main
 
 import (
+	"SportNotes/config"
 	"SportNotes/controllers"
 	"SportNotes/database"
 	"SportNotes/helper"
@@ -17,24 +18,17 @@ import (
 func main() {
 	log.Default().Println("Started Server!")
 
+	config.LoadEnv()
+
 	// Database
 	db := database.DatabaseConnection()
-	// db, err := database.DatabaseConnection(database.Config{
-	// 	Host:     viper.GetString("db.host"),
-	// 	Port:     viper.GetString("db.port"),
-	// 	User:     viper.GetString("db.user"),
-	// 	DBName:   viper.GetString("db.dbname"),
-	// 	Password: viper.GetString("db.password"),
-	// 	SSLMode:  viper.GetString("db.sslmode"),
-	// })
-	// if err != nil {
-	// 	log.Fatal("failed to initialize db:", err.Error())
-	// }
 
 	validate := validator.New()
 
-	db.Table("workout").AutoMigrate(&models.Workout{})
 	db.Table("account").AutoMigrate(&models.Account{})
+	db.Table("workout").AutoMigrate(&models.Workout{})
+	db.Table("training").AutoMigrate(models.Training{})
+
 	// Repository
 	WorkoutsRepository := repository.NewWorkoutsRepositoryImpl(db)
 	AccountsRepository := repository.NewAccountsRepositoryImpl(db)
@@ -55,14 +49,3 @@ func main() {
 	err := server.ListenAndServe()
 	helper.ErrorPanic(err)
 }
-
-// func initConfig() error {
-// 	viper.AddConfigPath("configs")
-// 	viper.SetConfigName("config")
-// 	viper.SetConfigType("yaml")
-
-// 	err := viper.ReadInConfig()
-// 	helper.ErrorPanic(err)
-
-// 	return nil
-// }

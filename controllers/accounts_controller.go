@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"SportNotes/data/requests"
-	"SportNotes/data/responses"
 	"SportNotes/helper"
+	"SportNotes/schemas"
 	"SportNotes/services"
 	"log"
 	"net/http"
@@ -25,25 +24,53 @@ func NewAccountsController(service services.AccountsService) *AccountsController
 // Контроллер на создание аккаунта
 func (controller *AccountsController) Create(c *gin.Context) {
 	log.Default().Println("Create accounts")
-	createAccountsRequest := requests.CreateAccountsRequest{}
+	createAccountsRequest := schemas.CreateAccountSchema{}
 	err := c.BindJSON(&createAccountsRequest)
 	helper.ErrorPanic(err)
 
 	controller.accountsService.Create(createAccountsRequest)
-	webResponse := responses.Response{
+	webResponse := schemas.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
-		Data:   nil,
+		Data:   createAccountsRequest.Id,
 	}
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, webResponse)
+}
+
+// Контроллер на авторизацию аккаунта
+func (controller *AccountsController) Login(c *gin.Context) {
+	log.Default().Println("Login accounts")
+	loginAccountsRequest := schemas.LoginAccountSchema{}
+	err := c.BindJSON(&loginAccountsRequest)
+	helper.ErrorPanic(err)
+
+	data := controller.accountsService.Login(loginAccountsRequest)
+	if data == true {
+		webResponse := schemas.Response{
+			Code:   http.StatusOK,
+			Status: "Ok",
+			Data:   "authorized",
+		}
+		c.Header("Content-Type", "application/json")
+		c.JSON(http.StatusOK, webResponse)
+	} else {
+		webResponse := schemas.Response{
+			Code:   http.StatusUnauthorized,
+			Status: "Bad",
+			Data:   "unauthorized",
+		}
+		c.Header("Content-Type", "application/json")
+		c.JSON(http.StatusUnauthorized, webResponse)
+	}
+
 }
 
 // Контроллер на поиск тренировок
 func (controller *AccountsController) FindAll(c *gin.Context) {
 	log.Default().Println("FindAll accounts")
 	accountsResponse := controller.accountsService.FindAll()
-	webResponse := responses.Response{
+	webResponse := schemas.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
 		Data:   accountsResponse,
@@ -84,7 +111,7 @@ func (controller *AccountsController) FindById(c *gin.Context) {
 
 	accountResponse := controller.accountsService.FindById(id)
 
-	webResponse := responses.Response{
+	webResponse := schemas.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
 		Data:   accountResponse,
@@ -101,7 +128,7 @@ func (controller *AccountsController) Delete(c *gin.Context) {
 	helper.ErrorPanic(err)
 	controller.accountsService.Delete(id)
 
-	webResponse := responses.Response{
+	webResponse := schemas.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
 		Data:   nil,

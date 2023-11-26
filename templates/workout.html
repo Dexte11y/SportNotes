@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Добавление тренировки</title>
+</head>
+<body>
+  <h1>Добавление тренировки</h1>
+  
+  <form action="http://127.0.0.1:8080/api/v1/workouts" method="post">
+    <div>
+      <label for="workoutType">Вид тренировки:</label>
+      <input type="text" id="workoutType" name="workoutType">
+    </div>
+    <div>
+      <label for="exerciseName">Название упражнения:</label>
+      <input type="text" id="exerciseName" name="exerciseName">
+    </div>
+    <div>
+      <label for="sets">Количество подходов:</label>
+      <input type="number" id="sets" name="sets">
+    </div>
+    <div>
+      <label for="reps">Количество повторений:</label>
+      <input type="number" id="reps" name="reps">
+    </div>
+    <div>
+      <label for="weight">Рабочий вес:</label>
+      <input type="number" id="weight" name="weight">
+    </div>
+  
+    <!-- Поля, только для примера. Не обязательно вводить сразу несколько упражнений -->
+    <div>
+      <hr>
+      <h3>Добавление еще одного упражнения</h3>
+      <label for="exerciseName2">Название упражнения:</label>
+      <input type="text" id="exerciseName2" name="exerciseName2">
+      <!-- Дополнительные поля для второго упражнения -->
+    </div>
+    
+    <div>
+      <input type="submit" value="Добавить">
+    </div>
+  </form>
+</body>
+</html>

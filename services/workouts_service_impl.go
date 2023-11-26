@@ -1,11 +1,10 @@
 package services
 
 import (
-	"SportNotes/data/requests"
-	"SportNotes/data/responses"
 	"SportNotes/helper"
 	"SportNotes/models"
 	"SportNotes/repository"
+	"SportNotes/schemas"
 
 	"github.com/go-playground/validator"
 )
@@ -24,27 +23,26 @@ func NewWorkoutsServiceImpl(WorkoutRepository repository.WorkoutsRepository, val
 
 // Реализация сервиса тренировок
 // Создание тренировки
-func (w *WorkoutsServiceImpl) Create(workout requests.CreateWorkoutsRequest) {
+func (w *WorkoutsServiceImpl) Create(workout schemas.CreateWorkoutSchema) {
 	err := w.Validate.Struct(workout)
 	helper.ErrorPanic(err)
 	workoutModel := models.Workout{
+		Id:        workout.Id,
 		IdAccount: workout.IdAccount,
-		IdWorkout: workout.IdWorkout,
-		Date:      workout.Date,
 	}
 	w.WorkoutsRepository.Save(workoutModel)
 }
 
 // Поиск всех тренировок
-func (w *WorkoutsServiceImpl) FindAll() []responses.WorkoutsResponse {
+func (w *WorkoutsServiceImpl) FindAll() []schemas.ResponseWorkoutSchema {
 	result := w.WorkoutsRepository.FindAll()
 
-	var workouts []responses.WorkoutsResponse
+	var workouts []schemas.ResponseWorkoutSchema
 	for _, value := range result {
-		workout := responses.WorkoutsResponse{
+		workout := schemas.ResponseWorkoutSchema{
+			Id:        value.Id,
 			IdAccount: value.IdAccount,
-			IdWorkout: value.IdWorkout,
-			Date:      value.Date,
+			CreatedAt: value.CreatedAt,
 		}
 		workouts = append(workouts, workout)
 	}
@@ -61,14 +59,14 @@ func (w *WorkoutsServiceImpl) FindAll() []responses.WorkoutsResponse {
 // }
 
 // Поиск тренировки по Id
-func (w *WorkoutsServiceImpl) FindById(workoutsId int) responses.WorkoutsResponse {
+func (w *WorkoutsServiceImpl) FindById(workoutsId int) schemas.ResponseWorkoutSchema {
 	workoutData, err := w.WorkoutsRepository.FindById(workoutsId)
 	helper.ErrorPanic(err)
 
-	workoutResponse := responses.WorkoutsResponse{
+	workoutResponse := schemas.ResponseWorkoutSchema{
+		Id:        workoutData.Id,
 		IdAccount: workoutData.IdAccount,
-		IdWorkout: workoutData.IdWorkout,
-		Date:      workoutData.Date,
+		CreatedAt: workoutData.CreatedAt,
 	}
 	return workoutResponse
 }
