@@ -20,7 +20,7 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
-
-./config
-
+#EnvFile
 .env
+#Makefile
+Makefile.

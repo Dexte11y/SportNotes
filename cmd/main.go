@@ -1,51 +1,76 @@
 package main
 
 import (
-	"SportNotes/config"
-	"SportNotes/controllers"
-	"SportNotes/database"
-	"SportNotes/helper"
-	"SportNotes/models"
-	"SportNotes/repository"
-	"SportNotes/routes"
-	"SportNotes/services"
-	"log"
-	"net/http"
+	"context"
+	"os"
+	"os/signal"
+	sportnotes "sportnotes"
+	"sportnotes/pkg/handler"
+	"sportnotes/pkg/repository"
+	"sportnotes/pkg/service"
+	"syscall"
 
-	"github.com/go-playground/validator"
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 func main() {
-	log.Default().Println("Started Server!")
+	logrus.SetFormatter(new(logrus.JSONFormatter))
 
-	config.LoadEnv()
-
-	// Database
-	db := database.DatabaseConnection()
-
-	validate := validator.New()
-
-	db.Table("account").AutoMigrate(&models.Account{})
-	db.Table("workout").AutoMigrate(&models.Workout{})
-	db.Table("training").AutoMigrate(models.Training{})
-
-	// Repository
-	WorkoutsRepository := repository.NewWorkoutsRepositoryImpl(db)
-	AccountsRepository := repository.NewAccountsRepositoryImpl(db)
-	// Service
-	WorkoutsService := services.NewWorkoutsServiceImpl(WorkoutsRepository, validate)
-	Accountservice := services.NewAccountsServiceImpl(AccountsRepository, validate)
-	// Controller
-	WorkoutsController := controllers.NewWorkoutsController(WorkoutsService)
-	AccountsController := controllers.NewAccountsController(Accountservice)
-	// Router
-	routes := routes.NewRouter(WorkoutsController, AccountsController)
-
-	server := &http.Server{
-		Addr:    ":8080",
-		Handler: routes,
+	if err := initConfig(); err != nil {
+		logrus.Fatalf("error loading config file:%s", err.Error())
 	}
 
-	err := server.ListenAndServe()
-	helper.ErrorPanic(err)
+	if err := godotenv.Load(); err != nil {
+		logrus.Fatalf("error loading env variables:%s", err.Error())
+	}
+
+	db, err := repository.NewPostgresDB(repository.Config{
+		Host:     viper.GetString("db.host"),
+		Port:     viper.GetString("db.port"),
+		Username: viper.GetString("db.username"),
+		DBName:   viper.GetString("db.dbname"),
+		SSLMode:  viper.GetString("db.sslmode"),
+		Password: viper.GetString("db.password"),
+		// Password: os.Getenv("DB_PASSWORD"),
+	})
+
+	if err != nil {
+		logrus.Fatalf("database initializing failed:%s", err.Error())
+	}
+
+	repo := repository.NewRepository(db)
+	services := service.NewService(repo)
+	handlers := handler.NewHandler(services)
+
+	srv := new(sportnotes.Server)
+	go func() {
+		if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
+			logrus.Fatalf("Server start error: %s", err.Error())
+		}
+	}()
+
+	logrus.Print("SportNotes started...")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+
+	logrus.Print("SportNotes sutting down...")
+
+	if err := srv.Shutdown(context.Background()); err != nil {
+		logrus.Errorf("error occured on server shutting down:%s", err.Error())
+	}
+
+	if err := db.Close(); err != nil {
+		logrus.Errorf("error occured on db connection close:%s", err.Error())
+	}
+}
+
+func initConfig() error {
+	viper.AddConfigPath("configs")
+	viper.SetConfigName("config")
+	return viper.ReadInConfig()
 }
