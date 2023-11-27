@@ -22,3 +22,17 @@ CREATE TABLE trainings (
   repetitions INT,
   weight INT
 );
+
+
+
+DROP TABLE users;
+DROP TABLE workouts;
+DROP TABLE trainings;
+
+cd .\vscodeprojects\SportNotes\
+
+go run cmd/main.go
+
+migrate create -ext sql -dir migrations -seq init
+
+migrate -database postgres://postgres:postgres@localhost:5432/sportnotes?sslmode=disable -path migrations up

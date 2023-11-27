@@ -31,28 +31,34 @@ func (r *UsersListPostgres) CreateUser(input sportnotes.User) (int, error) {
 	return id, nil
 }
 
-func (r *UsersListPostgres) GetAll() ([]sportnotes.User, error) {
-	var patients []sportnotes.User
+func (r *UsersListPostgres) GetAllUsers() ([]sportnotes.User, error) {
+	var users []sportnotes.User
 
-	query := fmt.Sprintf("SELECT id, name, surname, birthdate FROM %s", usersTable)
-	err := r.db.Select(&patients, query)
+	query := fmt.Sprintf("SELECT id, login, name, surname, email, password FROM %s", usersTable)
+	err := r.db.Select(&users, query)
 
-	return patients, err
+	return users, err
 }
 
-func (r *UsersListPostgres) GetById(id int) (sportnotes.User, error) {
-	var patient sportnotes.User
+func (r *UsersListPostgres) GetUserById(id int) (sportnotes.User, error) {
+	var user sportnotes.User
 
-	query := fmt.Sprintf("SELECT id, name, surname, birthdate FROM %s WHERE id = $1", usersTable)
-	err := r.db.Get(&patient, query, id)
+	query := fmt.Sprintf("SELECT id, login, name, surname, email, password FROM %s WHERE id = $1", usersTable)
+	err := r.db.Get(&user, query, id)
 
-	return patient, err
+	return user, err
 }
 
 func (r *UsersListPostgres) UpdateUser(id int, input sportnotes.UpdUser) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1
+
+	if input.Login != nil {
+		setValues = append(setValues, fmt.Sprintf("login=$%d", argId))
+		args = append(args, *input.Login)
+		argId++
+	}
 
 	if input.Name != nil {
 		setValues = append(setValues, fmt.Sprintf("name=$%d", argId))
@@ -66,9 +72,15 @@ func (r *UsersListPostgres) UpdateUser(id int, input sportnotes.UpdUser) error {
 		argId++
 	}
 
-	if input.BirthDate != nil {
-		setValues = append(setValues, fmt.Sprintf("birthdate=$%d", argId))
-		args = append(args, *input.BirthDate)
+	if input.Email != nil {
+		setValues = append(setValues, fmt.Sprintf("email=$%d", argId))
+		args = append(args, *input.Email)
+		argId++
+	}
+
+	if input.Password != nil {
+		setValues = append(setValues, fmt.Sprintf("password=$%d", argId))
+		args = append(args, *input.Password)
 		argId++
 	}
 
@@ -77,8 +89,8 @@ func (r *UsersListPostgres) UpdateUser(id int, input sportnotes.UpdUser) error {
 	query := fmt.Sprintf("UPDATE %s tl SET %s WHERE tl.id = $%d", usersTable, setQuery, argId)
 	args = append(args, id)
 
-	logrus.Debug("updateQuery: %s", query)
-	logrus.Debug("args: %s", args)
+	logrus.Debug("updateQuery: ", query)
+	logrus.Debug("args: ", args)
 
 	_, err := r.db.Exec(query, args...)
 	return err

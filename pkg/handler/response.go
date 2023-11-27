@@ -18,6 +18,10 @@ func newErrorResponse(c *gin.Context, statusCode int, message string) {
 	c.AbortWithStatusJSON(statusCode, errMessage{message})
 }
 
-type newPersonResponse struct {
+type newUserResponse struct {
+	Id int `json:"id" swaggertype:"primitive,integer"`
+}
+
+type newWorkoutResponse struct {
 	Id int `json:"id" swaggertype:"primitive,integer"`
 }

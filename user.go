@@ -2,13 +2,6 @@ package sportnotes
 
 import "errors"
 
-// type User struct {
-// 	Id        int    `json:"-"`
-// 	Name      string `json:"name" db:"name" binding:"required" example:"Mihail"`
-// 	Surname   string `json:"surname" db:"surname" binding:"required" example:"Kravcov"`
-// 	BirthDate string `json:"birthdate" binding:"required" time_format:"2006-01-25" example:"2006-01-25"`
-// }
-
 type User struct {
 	Id       int    `json:"id" db:"id" binding:"required"`
 	Login    string `json:"login" db:"login" binding:"required"`
@@ -19,13 +12,15 @@ type User struct {
 }
 
 type UpdUser struct {
-	Name      *string `json:"name" example:"Igor"`
-	Surname   *string `json:"surname" example:"Vasilev"`
-	BirthDate *string `json:"birthdate" time_format:"2006-01-02" example:"2000-05-13"`
+	Login    *string `json:"login"`
+	Name     *string `json:"name"`
+	Surname  *string `json:"surname"`
+	Email    *string `json:"email"`
+	Password *string `json:"password"`
 }
 
 func (u UpdUser) Validate() error {
-	if u.Name == nil && u.Surname == nil && u.BirthDate == nil {
+	if u.Name == nil && u.Surname == nil && u.Login == nil && u.Email == nil && u.Password == nil {
 		errors.New("update structure has no values")
 	}
 

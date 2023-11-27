@@ -8,63 +8,63 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type getAllUsersResponse struct {
-	Data []sportnotes.User `json:"data"`
+type getAllWorkoutsResponse struct {
+	Data []sportnotes.Workout `json:"data"`
 }
 
-func (h *Handler) createUser(c *gin.Context) {
+func (h *Handler) createWorkout(c *gin.Context) {
 	// _, err := getDoctorId(c)
 	// if err != nil {
 	// 	newErrorResponse(c, http.StatusInternalServerError, err.Error())
 	// 	return
 	// }
 
-	var input sportnotes.User
+	var input sportnotes.Workout
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	id, err := h.services.UserList.CreateUser(input)
+	id, err := h.services.WorkoutList.CreateWorkout(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, newUserResponse{
+	c.JSON(http.StatusOK, newWorkoutResponse{
 		Id: id,
 	})
 }
 
-func (h *Handler) getAllUsers(c *gin.Context) {
-	users, err := h.services.UserList.GetAllUsers()
+func (h *Handler) getAllWorkouts(c *gin.Context) {
+	workouts, err := h.services.WorkoutList.GetAllWorkouts()
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, getAllUsersResponse{
-		Data: users,
+	c.JSON(http.StatusOK, getAllWorkoutsResponse{
+		Data: workouts,
 	})
 }
 
-func (h *Handler) getUserById(c *gin.Context) {
+func (h *Handler) getWorkoutById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
 		return
 	}
 
-	user, err := h.services.UserList.GetUserById(id)
+	workout, err := h.services.WorkoutList.GetWorkoutById(id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, workout)
 }
 
-func (h *Handler) updateUser(c *gin.Context) {
+func (h *Handler) updateWorkout(c *gin.Context) {
 	// _, err := getDoctorId(c)
 	// if err != nil {
 	// 	return
@@ -76,13 +76,13 @@ func (h *Handler) updateUser(c *gin.Context) {
 		return
 	}
 
-	var input sportnotes.UpdUser
+	var input sportnotes.UpdWorkout
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if err := h.services.UserList.UpdateUser(id, input); err != nil {
+	if err := h.services.WorkoutList.UpdateWorkout(id, input); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -92,7 +92,7 @@ func (h *Handler) updateUser(c *gin.Context) {
 	})
 }
 
-func (h *Handler) deleteUser(c *gin.Context) {
+func (h *Handler) deleteWorkout(c *gin.Context) {
 	// _, err := getDoctorId(c)
 	// if err != nil {
 	// 	return
@@ -104,7 +104,7 @@ func (h *Handler) deleteUser(c *gin.Context) {
 		return
 	}
 
-	err = h.services.UserList.DeleteUser(id)
+	err = h.services.WorkoutList.DeleteWorkout(id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

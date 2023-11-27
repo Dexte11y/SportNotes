@@ -22,3 +22,5 @@ rad.json
 TestResults.xml
 #EnvFile
 .env
+#Makefile
+Makefile.

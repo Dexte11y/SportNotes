@@ -18,12 +18,12 @@ func (s *UsersListService) CreateUser(input sportnotes.User) (int, error) {
 	return s.repo.CreateUser(input)
 }
 
-func (s *UsersListService) GetAll() ([]sportnotes.User, error) {
-	return s.repo.GetAll()
+func (s *UsersListService) GetAllUsers() ([]sportnotes.User, error) {
+	return s.repo.GetAllUsers()
 }
 
-func (s *UsersListService) GetById(id int) (sportnotes.User, error) {
-	return s.repo.GetById(id)
+func (s *UsersListService) GetUserById(id int) (sportnotes.User, error) {
+	return s.repo.GetUserById(id)
 }
 
 func (s *UsersListService) UpdateUser(id int, input sportnotes.UpdUser) error {

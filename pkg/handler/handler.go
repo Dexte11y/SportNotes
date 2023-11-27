@@ -34,6 +34,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		// 	doctors.GET("/:id", h.getDoctorById)
 		// }
 
+		workouts := api.Group("/workouts")
+		{
+			workouts.POST("/", h.createWorkout)
+			workouts.GET("/", h.getAllWorkouts)
+			workouts.GET("/:id", h.getWorkoutById)
+			workouts.PUT("/:id", h.updateWorkout)
+			workouts.DELETE("/:id", h.deleteWorkout)
+		}
+
 		users := api.Group("/users")
 		{
 			users.POST("/", h.createUser)

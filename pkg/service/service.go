@@ -21,33 +21,31 @@ import (
 
 type UserList interface {
 	CreateUser(input sportnotes.User) (int, error)
-	GetAll() ([]sportnotes.User, error)
-	GetById(id int) (sportnotes.User, error)
+	GetAllUsers() ([]sportnotes.User, error)
+	GetUserById(id int) (sportnotes.User, error)
 	UpdateUser(id int, input sportnotes.UpdUser) error
 	DeleteUser(id int) error
 }
 
-// type VisitList interface {
-// 	CreateVisit(input sportnotes.Visit) (int, error)
-// 	GetAll() ([]sportnotes.VisitOutput, error)
-// 	GetById(id int) (sportnotes.VisitOutput, error)
-// 	UpdateVisit(id int, input sportnotes.UpdVisit) error
-// 	DeleteVisit(id int) error
-// }
+type WorkoutList interface {
+	CreateWorkout(workout sportnotes.Workout) (int, error)
+	GetAllWorkouts() ([]sportnotes.Workout, error)
+	GetWorkoutById(id int) (sportnotes.Workout, error)
+	UpdateWorkout(id int, input sportnotes.UpdWorkout) error
+	DeleteWorkout(id int) error
+}
 
 type Service struct {
 	// Authorisation
-	// DoctorList
+	WorkoutList
 	UserList
-	// VisitList
 }
 
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
-		UserList: NewUsersListService(repo.UserList),
+		WorkoutList: NewWorkoutsListService(repo.WorkoutList),
+		UserList:    NewUsersListService(repo.UserList),
 
 		// Authorisation: NewAuthService(repo.Authorisation),
-		// DoctorList:    NewDoctorsListService(repo.DoctorList),
-		// VisitList:     NewVisitsListPostgres(repo.VisitList),
 	}
 }
