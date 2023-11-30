@@ -20,8 +20,7 @@ func NewUsersListPostgres(db *sqlx.DB) *UsersListPostgres {
 
 func (r *UsersListPostgres) CreateUser(input sportnotes.User) (int, error) {
 	var id int
-	query := fmt.Sprintf("INSERT INTO %s (id, login, name, surname, email, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
-		usersTable)
+	query := fmt.Sprintf("INSERT INTO %s (id, login, name, surname, email, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", usersTable)
 
 	row := r.db.QueryRow(query, input.Id, input.Login, input.Name, input.Surname, input.Email, input.Password)
 	if err := row.Scan(&id); err != nil {

@@ -33,13 +33,21 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		// 	doctors.GET("/", h.getAllDoctors)
 		// 	doctors.GET("/:id", h.getDoctorById)
 		// }
+		trainings := api.Group("/trainings")
+		{
+			trainings.POST("/", h.createTraining)
+			trainings.GET("/", h.getAllTrainings)
+			trainings.GET("/:id", h.getTrainingById)
+			trainings.PUT("/:id", h.updateTraining)
+			trainings.DELETE("/:id", h.deleteTraining)
+		}
 
 		workouts := api.Group("/workouts")
 		{
 			workouts.POST("/", h.createWorkout)
 			workouts.GET("/", h.getAllWorkouts)
 			workouts.GET("/:id", h.getWorkoutById)
-			workouts.PUT("/:id", h.updateWorkout)
+			// workouts.PUT("/:id", h.updateWorkout)
 			workouts.DELETE("/:id", h.deleteWorkout)
 		}
 

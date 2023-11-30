@@ -16,6 +16,14 @@ import (
 // 	GetById(id int) (medapp.Doctor, error)
 // }
 
+type TrainingList interface {
+	CreateTraining(training sportnotes.Training) (int, error)
+	GetAllTrainings() ([]sportnotes.Training, error)
+	GetTrainingById(id int) (sportnotes.Training, error)
+	UpdateTraining(id int, input sportnotes.UpdTraining) error
+	DeleteTraining(id int) error
+}
+
 type UserList interface {
 	CreateUser(input sportnotes.User) (int, error)
 	GetAllUsers() ([]sportnotes.User, error)
@@ -28,20 +36,22 @@ type WorkoutList interface {
 	CreateWorkout(workout sportnotes.Workout) (int, error)
 	GetAllWorkouts() ([]sportnotes.Workout, error)
 	GetWorkoutById(id int) (sportnotes.Workout, error)
-	UpdateWorkout(id int, input sportnotes.UpdWorkout) error
+	// UpdateWorkout(id int, input sportnotes.UpdWorkout) error
 	DeleteWorkout(id int) error
 }
 
 type Repository struct {
 	// Authorisation
+	TrainingList
 	UserList
 	WorkoutList
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
-		WorkoutList: NewWorkoutsListPostgres(db),
-		UserList:    NewUsersListPostgres(db),
+		TrainingList: NewTrainingsListPostgres(db),
+		WorkoutList:  NewWorkoutsListPostgres(db),
+		UserList:     NewUsersListPostgres(db),
 		// Authorisation: NewAuthPostgres(db),
 	}
 }

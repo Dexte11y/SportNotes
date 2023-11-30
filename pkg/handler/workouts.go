@@ -64,33 +64,33 @@ func (h *Handler) getWorkoutById(c *gin.Context) {
 	c.JSON(http.StatusOK, workout)
 }
 
-func (h *Handler) updateWorkout(c *gin.Context) {
-	// _, err := getDoctorId(c)
-	// if err != nil {
-	// 	return
-	// }
+// func (h *Handler) updateWorkout(c *gin.Context) {
+// 	// _, err := getDoctorId(c)
+// 	// if err != nil {
+// 	// 	return
+// 	// }
 
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
-		return
-	}
+// 	id, err := strconv.Atoi(c.Param("id"))
+// 	if err != nil {
+// 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+// 		return
+// 	}
 
-	var input sportnotes.UpdWorkout
-	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
+// 	var input sportnotes.UpdWorkout
+// 	if err := c.BindJSON(&input); err != nil {
+// 		newErrorResponse(c, http.StatusBadRequest, err.Error())
+// 		return
+// 	}
 
-	if err := h.services.WorkoutList.UpdateWorkout(id, input); err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err := h.services.WorkoutList.UpdateWorkout(id, input); err != nil {
+// 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	c.JSON(http.StatusOK, statusResponse{
-		Status: "ok",
-	})
-}
+// 	c.JSON(http.StatusOK, statusResponse{
+// 		Status: "ok",
+// 	})
+// }
 
 func (h *Handler) deleteWorkout(c *gin.Context) {
 	// _, err := getDoctorId(c)
