@@ -9,7 +9,7 @@ import (
 )
 
 type getAllWorkoutsResponse struct {
-	Data []sportnotes.Workout `json:"data"`
+	Data []sportnotes.WorkoutOutputAll `json:"data"`
 }
 
 func (h *Handler) createWorkout(c *gin.Context) {

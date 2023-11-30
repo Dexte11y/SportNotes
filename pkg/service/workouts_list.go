@@ -18,7 +18,7 @@ func (s *WorkoutsListService) CreateWorkout(input sportnotes.Workout) (int, erro
 	return s.repo.CreateWorkout(input)
 }
 
-func (s *WorkoutsListService) GetAllWorkouts() ([]sportnotes.Workout, error) {
+func (s *WorkoutsListService) GetAllWorkouts() ([]sportnotes.WorkoutOutputAll, error) {
 	return s.repo.GetAllWorkouts()
 }
 

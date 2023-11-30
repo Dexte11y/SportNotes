@@ -11,15 +11,23 @@ type Workout struct {
 	CreatedAt time.Time `json:"createdAt" db:"created_at"`
 }
 
+type WorkoutOutputAll struct {
+	Id        int       `json:"id" db:"id" binding:"required"`
+	Type      string    `json:"type" db:"type" binding:"required"`
+	CreatedAt time.Time `json:"createdAt" db:"created_at" binding:"required"`
+	TrainList []TrainingOutput
+}
+
 type WorkoutOutputById struct {
 	Id        int       `json:"id" db:"id" binding:"required"`
 	Type      string    `json:"type" db:"type" binding:"required"`
 	CreatedAt time.Time `json:"createdAt" db:"created_at" binding:"required"`
-	TrainList []Train
+	TrainList []TrainingOutput
 }
 
-type Train struct {
+type TrainingOutput struct {
 	Id          int    `json:"idTraining" db:"id" binding:"required"`
+	IdWorkout   int    `json:"idWorkout" db:"id_workout" binding:"required"`
 	Name        string `json:"name" db:"name" binding:"required"`
 	Approaches  int    `json:"approaches" db:"approaches" binding:"required"`
 	Repetitions int    `json:"repetitions" db:"repetitions" binding:"required"`

@@ -28,28 +28,41 @@ func (r *WorkoutsListPostgres) CreateWorkout(input sportnotes.Workout) (int, err
 	return id, nil
 }
 
-func (r *WorkoutsListPostgres) GetAllWorkouts() ([]sportnotes.Workout, error) {
-	var workouts []sportnotes.Workout
+func (r *WorkoutsListPostgres) GetAllWorkouts() ([]sportnotes.WorkoutOutputAll, error) {
+	var workoutsList []sportnotes.WorkoutOutputAll
+	var trainList []sportnotes.TrainingOutput
 
-	query := fmt.Sprintf("SELECT id, id_user, type, created_at FROM %s", workoutsTable)
-	err := r.db.Select(&workouts, query)
+	queryWorkouts := fmt.Sprintf("SELECT id, type, created_at FROM %s", workoutsTable)
+	err := r.db.Select(&workoutsList, queryWorkouts)
 
-	return workouts, err
+	queryTrainings := fmt.Sprintf("SELECT id, id_workout, name, approaches, repetitions, weight FROM %s", trainingsTable)
+	r.db.Select(&trainList, queryTrainings)
+
+	mergetWorkouts := make([]sportnotes.WorkoutOutputAll, 0)
+	for _, valueWorkouts := range workoutsList {
+		for _, valueTrainings := range trainList {
+			if valueWorkouts.Id == valueTrainings.IdWorkout {
+				valueWorkouts.TrainList = append(valueWorkouts.TrainList, valueTrainings)
+			}
+		}
+		mergetWorkouts = append(mergetWorkouts, valueWorkouts)
+	}
+	return mergetWorkouts, err
 }
 
 func (r *WorkoutsListPostgres) GetWorkoutById(id int) (sportnotes.WorkoutOutputById, error) {
-	var workout sportnotes.WorkoutOutputById
-	var trainList []sportnotes.Train
+	var workoutsList sportnotes.WorkoutOutputById
+	var trainList []sportnotes.TrainingOutput
 
-	query := fmt.Sprintf("SELECT id, type, created_at FROM %s WHERE id = $1", workoutsTable)
-	err := r.db.Get(&workout, query, id)
+	queryWorkouts := fmt.Sprintf("SELECT id, type, created_at FROM %s WHERE id = $1", workoutsTable)
+	err := r.db.Get(&workoutsList, queryWorkouts, id)
 
-	stmt := fmt.Sprintf("SELECT id, name, approaches, repetitions, weight FROM %s WHERE id_workout = $1", trainingsTable)
-	r.db.Select(&trainList, stmt, id)
+	queryTrainings := fmt.Sprintf("SELECT id, id_workout, name, approaches, repetitions, weight FROM %s WHERE id_workout = $1", trainingsTable)
+	r.db.Select(&trainList, queryTrainings, id)
 
-	workout.TrainList = trainList
+	workoutsList.TrainList = trainList
 
-	return workout, err
+	return workoutsList, err
 }
 
 // func (r *WorkoutsListPostgres) UpdateWorkout(id int, input sportnotes.UpdWorkout) error {
