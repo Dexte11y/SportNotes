@@ -22,7 +22,7 @@ func (s *WorkoutsListService) GetAllWorkouts() ([]sportnotes.Workout, error) {
 	return s.repo.GetAllWorkouts()
 }
 
-func (s *WorkoutsListService) GetWorkoutById(id int) (sportnotes.Workout, error) {
+func (s *WorkoutsListService) GetWorkoutById(id int) (sportnotes.WorkoutOutputById, error) {
 	return s.repo.GetWorkoutById(id)
 }
 

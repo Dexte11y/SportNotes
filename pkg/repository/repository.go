@@ -35,7 +35,7 @@ type UserList interface {
 type WorkoutList interface {
 	CreateWorkout(workout sportnotes.Workout) (int, error)
 	GetAllWorkouts() ([]sportnotes.Workout, error)
-	GetWorkoutById(id int) (sportnotes.Workout, error)
+	GetWorkoutById(id int) (sportnotes.WorkoutOutputById, error)
 	// UpdateWorkout(id int, input sportnotes.UpdWorkout) error
 	DeleteWorkout(id int) error
 }

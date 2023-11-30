@@ -37,11 +37,17 @@ func (r *WorkoutsListPostgres) GetAllWorkouts() ([]sportnotes.Workout, error) {
 	return workouts, err
 }
 
-func (r *WorkoutsListPostgres) GetWorkoutById(id int) (sportnotes.Workout, error) {
-	var workout sportnotes.Workout
+func (r *WorkoutsListPostgres) GetWorkoutById(id int) (sportnotes.WorkoutOutputById, error) {
+	var workout sportnotes.WorkoutOutputById
+	var trainList []sportnotes.Train
 
-	query := fmt.Sprintf("SELECT id, id_user, type, created_at FROM %s WHERE id = $1", workoutsTable)
+	query := fmt.Sprintf("SELECT id, type, created_at FROM %s WHERE id = $1", workoutsTable)
 	err := r.db.Get(&workout, query, id)
+
+	stmt := fmt.Sprintf("SELECT id, name, approaches, repetitions, weight FROM %s WHERE id_workout = $1", trainingsTable)
+	r.db.Select(&trainList, stmt, id)
+
+	workout.TrainList = trainList
 
 	return workout, err
 }

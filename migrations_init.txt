@@ -16,7 +16,7 @@ CREATE TABLE workouts (
 
 CREATE TABLE trainings (
   id INT PRIMARY KEY,
-  id_workout INT,
+  id_workout INT references workouts(id) on delete cascade not null,
   name VARCHAR(50),
   approaches INT,
   repetitions INT,
