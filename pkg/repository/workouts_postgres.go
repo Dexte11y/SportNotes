@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"time"
 
 	sportnotes "sportnotes"
 
@@ -18,9 +19,10 @@ func NewWorkoutsListPostgres(db *sqlx.DB) *WorkoutsListPostgres {
 
 func (r *WorkoutsListPostgres) CreateWorkout(input sportnotes.Workout) (int, error) {
 	var id int
+	data := time.Now().Format("2006-01-02")
 	query := fmt.Sprintf("INSERT INTO %s (id, id_user, type, created_at) VALUES ($1, $2, $3, $4) RETURNING id", workoutsTable)
 
-	row := r.db.QueryRow(query, input.Id, input.IdUser, input.Type, input.CreatedAt)
+	row := r.db.QueryRow(query, input.Id, input.IdUser, input.Type, data)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
