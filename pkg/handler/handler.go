@@ -45,7 +45,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		workouts := api.Group("/workouts")
 		{
 			workouts.POST("/", h.createWorkout)
-			workouts.GET("/", h.getAllWorkouts)
+			workouts.GET("/:id/", h.getWorkoutsByParam)
 			workouts.GET("/:id", h.getWorkoutById)
 			// workouts.PUT("/:id", h.updateWorkout)
 			workouts.DELETE("/:id", h.deleteWorkout)

@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type getAllWorkoutsResponse struct {
-	Data []sportnotes.WorkoutOutputAll `json:"data"`
-}
+// type getWorkoutsByParamResponse struct {
+// 	Data []sportnotes.WorkoutOutputByParam `json:"data"`
+// }
 
 func (h *Handler) createWorkout(c *gin.Context) {
 	// _, err := getDoctorId(c)
@@ -36,16 +36,25 @@ func (h *Handler) createWorkout(c *gin.Context) {
 	})
 }
 
-func (h *Handler) getAllWorkouts(c *gin.Context) {
-	workouts, err := h.services.WorkoutList.GetAllWorkouts()
+func (h *Handler) getWorkoutsByParam(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+		return
+	}
+
+	input := c.DefaultQuery("interval", "none")
+	if input == "" {
+		input = "week"
+	} //сделать обработку ошибки
+
+	workouts, err := h.services.WorkoutList.GetWorkoutsByParam(id, input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, getAllWorkoutsResponse{
-		Data: workouts,
-	})
+	c.JSON(http.StatusOK, workouts)
 }
 
 func (h *Handler) getWorkoutById(c *gin.Context) {
