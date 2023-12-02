@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	usersTable     = "users"
-	workoutsTable  = "workouts"
-	trainingsTable = "trainings"
+	usersTable      = "users"
+	workoutsTable   = "workouts"
+	trainingsTable  = "trainings"
+	nutritionsTable = "nutritions"
 )
 
 type Config struct {

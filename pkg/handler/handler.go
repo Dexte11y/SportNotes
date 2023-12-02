@@ -27,12 +27,20 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	// , h.userIdentity
 	api := router.Group("/api")
 	{
-
 		// doctors := api.Group("/doctors")
 		// {
 		// 	doctors.GET("/", h.getAllDoctors)
 		// 	doctors.GET("/:id", h.getDoctorById)
 		// }
+
+		nutritions := api.Group("/nutritions")
+		{
+			nutritions.POST("/", h.createNutrition)
+			// nutritions.GET("/:id", h.getNutritionsByParam)
+			// nutritions.PUT("/:id", h.updateNutrition)
+			nutritions.DELETE("/:id", h.deleteNutrition)
+		}
+
 		trainings := api.Group("/trainings")
 		{
 			trainings.POST("/", h.createTraining)
@@ -45,8 +53,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		workouts := api.Group("/workouts")
 		{
 			workouts.POST("/", h.createWorkout)
-			workouts.GET("/:id/", h.getWorkoutsByParam)
-			workouts.GET("/:id", h.getWorkoutById)
+			workouts.GET("/:id", h.getWorkoutsByParam)
 			// workouts.PUT("/:id", h.updateWorkout)
 			workouts.DELETE("/:id", h.deleteWorkout)
 		}

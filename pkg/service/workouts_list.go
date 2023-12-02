@@ -22,10 +22,6 @@ func (s *WorkoutsListService) GetWorkoutsByParam(id int, input string) ([]sportn
 	return s.repo.GetWorkoutsByParam(id, input)
 }
 
-func (s *WorkoutsListService) GetWorkoutById(id int) (sportnotes.WorkoutOutputById, error) {
-	return s.repo.GetWorkoutById(id)
-}
-
 func (s *WorkoutsListService) DeleteWorkout(id int) error {
 	return s.repo.DeleteWorkout(id)
 }

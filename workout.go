@@ -12,25 +12,11 @@ type Workout struct {
 }
 
 type WorkoutOutputByParam struct {
-	Id        int       `json:"id" db:"id" binding:"required"`
-	IdUser    int       `json:"idUser" db:"id_user" binding:"required"`
-	Type      string    `json:"type" db:"type" binding:"required"`
-	CreatedAt time.Time `json:"createdAt" db:"created_at" binding:"required"`
-	TrainList []TrainingOutput
-}
-
-type WorkoutOutputById struct {
-	Id        int       `json:"id" db:"id" binding:"required"`
-	Type      string    `json:"type" db:"type" binding:"required"`
-	CreatedAt time.Time `json:"createdAt" db:"created_at" binding:"required"`
-	TrainList []TrainingOutput
-}
-
-type WorkoutOutputByDate struct {
-	Id        int       `json:"id" db:"id" binding:"required"`
-	Type      string    `json:"type" db:"type" binding:"required"`
-	CreatedAt time.Time `json:"createdAt" db:"created_at" binding:"required"`
-	TrainList []TrainingOutput
+	Id        int              `json:"id" db:"id" binding:"required"`
+	IdUser    int              `json:"idUser" db:"id_user" binding:"required"`
+	Type      string           `json:"type" db:"type" binding:"required"`
+	CreatedAt time.Time        `json:"createdAt" db:"created_at" binding:"required"`
+	TrainList []TrainingOutput `json:"trainList"`
 }
 
 type TrainingOutput struct {
@@ -40,10 +26,6 @@ type TrainingOutput struct {
 	Approaches  int    `json:"approaches" db:"approaches" binding:"required"`
 	Repetitions int    `json:"repetitions" db:"repetitions" binding:"required"`
 	Weight      int    `json:"weight" db:"weight" binding:"required"`
-}
-
-type Date struct {
-	Interval string `json:"interval" binding:"required"`
 }
 
 // type UpdWorkout struct {

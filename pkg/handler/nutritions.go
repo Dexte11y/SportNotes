@@ -12,52 +12,57 @@ import (
 // 	Data []sportnotes.WorkoutOutputByParam `json:"data"`
 // }
 
-func (h *Handler) createWorkout(c *gin.Context) {
+func (h *Handler) createNutrition(c *gin.Context) {
 	// _, err := getDoctorId(c)
 	// if err != nil {
 	// 	newErrorResponse(c, http.StatusInternalServerError, err.Error())
 	// 	return
 	// }
 
-	var input sportnotes.Workout
+	var input sportnotes.Nutrition
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	id, err := h.services.WorkoutList.CreateWorkout(input)
+	id, err := h.services.NutritionList.CreateNutrition(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, newWorkoutResponse{
+	c.JSON(http.StatusOK, newNutritionResponse{
 		Id: id,
 	})
 }
 
-func (h *Handler) getWorkoutsByParam(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
-		return
-	}
+// func (h *Handler) getNutritionsByParam(c *gin.Context) {
+// 	id, err := strconv.Atoi(c.Param("id"))
+// 	if err != nil {
+// 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+// 		return
+// 	}
 
-	input := c.DefaultQuery("interval", "none")
-	if input == "" {
-		input = "week"
-	} //сделать обработку ошибки
+// 	startPoint := c.DefaultQuery("startpoint", "none")
+// 	if startPoint == "" {
+// 		startPoint = "week"
+// 	}
 
-	workouts, err := h.services.WorkoutList.GetWorkoutsByParam(id, input)
-	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	endPoint := c.DefaultQuery("endpoint", "none")
+// 	if endPoint == "" {
+// 		endPoint = "week"
+// 	}
 
-	c.JSON(http.StatusOK, workouts)
-}
+// 	nutritions, err := h.services.NutritionList.GetNutritionsByParam(id)
+// 	if err != nil {
+// 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-// func (h *Handler) updateWorkout(c *gin.Context) {
+// 	c.JSON(http.StatusOK, nutritions)
+// }
+
+// func (h *Handler) updateNutrition(c *gin.Context) {
 // 	// _, err := getDoctorId(c)
 // 	// if err != nil {
 // 	// 	return
@@ -85,7 +90,7 @@ func (h *Handler) getWorkoutsByParam(c *gin.Context) {
 // 	})
 // }
 
-func (h *Handler) deleteWorkout(c *gin.Context) {
+func (h *Handler) deleteNutrition(c *gin.Context) {
 	// _, err := getDoctorId(c)
 	// if err != nil {
 	// 	return
@@ -97,7 +102,7 @@ func (h *Handler) deleteWorkout(c *gin.Context) {
 		return
 	}
 
-	err = h.services.WorkoutList.DeleteWorkout(id)
+	err = h.services.NutritionList.DeleteNutrition(id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

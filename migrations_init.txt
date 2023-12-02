@@ -23,11 +23,19 @@ CREATE TABLE trainings (
   weight INT
 );
 
+CREATE TABLE nutritions (
+  id INT PRIMARY KEY,
+  id_user INT references users(id) on delete cascade not null,
+  type VARCHAR(50),
+  created_at DATE
+);
+
 
 
 DROP TABLE users;
 DROP TABLE workouts;
 DROP TABLE trainings;
+DROP TABLE nutritions;
 
 cd .\vscodeprojects\SportNotes\
 
