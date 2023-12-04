@@ -9,6 +9,7 @@ type Nutrition struct {
 	IdUser    int       `json:"idUser" db:"id_user" binding:"required"`
 	Type      string    `json:"type" db:"type" binding:"required"`
 	CreatedAt time.Time `json:"createdAt" db:"created_at"`
+	FoodList  []Food    `json:"foodList"`
 }
 
 type NutritionOutputByParam struct {

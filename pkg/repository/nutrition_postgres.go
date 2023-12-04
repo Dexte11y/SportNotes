@@ -18,13 +18,21 @@ func NewNutritionListPostgres(db *sqlx.DB) *NutritionsListPostgres {
 }
 
 func (r *NutritionsListPostgres) CreateNutrition(input sportnotes.Nutrition) (int, error) {
+	var foodList []sportnotes.Food
 	var id int
 	currentData := time.Now().UTC()
 
-	query := fmt.Sprintf("INSERT INTO %s (id, id_user, type, created_at) VALUES ($1, $2, $3, $4) RETURNING id", nutritionsTable)
+	foodList = append(foodList, input.FoodList...)
 
-	row := r.db.QueryRow(query, input.Id, input.IdUser, input.Type, currentData)
+	queryNutritions := fmt.Sprintf("INSERT INTO %s (id, id_user, type, created_at) VALUES ($1, $2, $3, $4) RETURNING id", nutritionsTable)
+	row := r.db.QueryRow(queryNutritions, input.Id, input.IdUser, input.Type, currentData)
 	if err := row.Scan(&id); err != nil {
+		return 0, err
+	}
+
+	queryFoods := fmt.Sprintf("INSERT INTO %s (id, id_nutrition, name) VALUES (:id, :id_nutrition, :name)", foodsTable)
+	_, err := r.db.NamedExec(queryFoods, foodList)
+	if err != nil {
 		return 0, err
 	}
 
@@ -34,10 +42,6 @@ func (r *NutritionsListPostgres) CreateNutrition(input sportnotes.Nutrition) (in
 func (r *NutritionsListPostgres) GetNutritionsByParam(id int, startpoint, endpoint string) ([]sportnotes.NutritionOutputByParam, error) {
 	var nutritionsList []sportnotes.NutritionOutputByParam
 	var foodsList []sportnotes.FoodOutput
-	// currentDate := time.Now().UTC()
-
-	// var intervalMap = map[string]time.Duration{"all": -876000 * time.Hour, "year": -8760 * time.Hour, "month": -720 * time.Hour, "week": -168 * time.Hour}
-	// previousDate := currentDate.Add(intervalMap[interval])
 
 	queryNutritions := fmt.Sprintf("SELECT id, id_user, type, created_at FROM %s WHERE id_user = $1 AND created_at >= $2 AND created_at <= $3", nutritionsTable)
 	r.db.Select(&nutritionsList, queryNutritions, id, startpoint, endpoint)
