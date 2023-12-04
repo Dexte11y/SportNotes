@@ -36,31 +36,31 @@ func (h *Handler) createNutrition(c *gin.Context) {
 	})
 }
 
-// func (h *Handler) getNutritionsByParam(c *gin.Context) {
-// 	id, err := strconv.Atoi(c.Param("id"))
-// 	if err != nil {
-// 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
-// 		return
-// 	}
+func (h *Handler) getNutritionsByParam(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+		return
+	}
 
-// 	startPoint := c.DefaultQuery("startpoint", "none")
-// 	if startPoint == "" {
-// 		startPoint = "week"
-// 	}
+	startPoint := c.DefaultQuery("startpoint", "none")
+	if startPoint == "" {
+		startPoint = "week"
+	}
 
-// 	endPoint := c.DefaultQuery("endpoint", "none")
-// 	if endPoint == "" {
-// 		endPoint = "week"
-// 	}
+	endPoint := c.DefaultQuery("endpoint", "none")
+	if endPoint == "" {
+		endPoint = "week"
+	}
 
-// 	nutritions, err := h.services.NutritionList.GetNutritionsByParam(id)
-// 	if err != nil {
-// 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-// 		return
-// 	}
+	nutritions, err := h.services.NutritionList.GetNutritionsByParam(id, startPoint, endPoint)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
 
-// 	c.JSON(http.StatusOK, nutritions)
-// }
+	c.JSON(http.StatusOK, nutritions)
+}
 
 // func (h *Handler) updateNutrition(c *gin.Context) {
 // 	// _, err := getDoctorId(c)

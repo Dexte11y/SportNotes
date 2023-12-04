@@ -11,6 +11,7 @@ const (
 	workoutsTable   = "workouts"
 	trainingsTable  = "trainings"
 	nutritionsTable = "nutritions"
+	foodsTable      = "foods"
 )
 
 type Config struct {

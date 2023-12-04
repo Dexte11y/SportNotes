@@ -19,9 +19,17 @@ import (
 // 	GetById(id int) (sportnotes.Doctor, error)
 // }
 
+type FoodList interface {
+	CreateFood(food sportnotes.Food) (int, error)
+	GetAllFoods() ([]sportnotes.Food, error)
+	GetFoodById(id int) (sportnotes.Food, error)
+	// UpdateFood(id int, input sportnotes.UpdFood) error
+	DeleteFood(id int) error
+}
+
 type NutritionList interface {
 	CreateNutrition(nutrition sportnotes.Nutrition) (int, error)
-	// GetNutritionsByParam(id int) ([]sportnotes.NutritionOutputByParam, error)
+	GetNutritionsByParam(id int, startpoint, endpoint string) ([]sportnotes.NutritionOutputByParam, error)
 	// UpdateNutrition(id int, input sportnotes.UpdNutrition) error
 	DeleteNutrition(id int) error
 }
@@ -51,6 +59,7 @@ type WorkoutList interface {
 
 type Service struct {
 	// Authorisation
+	FoodList
 	NutritionList
 	TrainingList
 	WorkoutList
@@ -59,6 +68,7 @@ type Service struct {
 
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
+		FoodList:      NewFoodsListService(repo.FoodList),
 		NutritionList: NewNutritionsListService(repo.NutritionList),
 		TrainingList:  NewTrainingsListService(repo.TrainingList),
 		WorkoutList:   NewWorkoutsListService(repo.WorkoutList),

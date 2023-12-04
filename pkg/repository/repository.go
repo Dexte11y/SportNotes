@@ -16,9 +16,17 @@ import (
 // 	GetById(id int) (medapp.Doctor, error)
 // }
 
+type FoodList interface {
+	CreateFood(food sportnotes.Food) (int, error)
+	GetAllFoods() ([]sportnotes.Food, error)
+	GetFoodById(id int) (sportnotes.Food, error)
+	// UpdateFood(id int, input sportnotes.UpdFood) error
+	DeleteFood(id int) error
+}
+
 type NutritionList interface {
 	CreateNutrition(nutrition sportnotes.Nutrition) (int, error)
-	// GetNutritionsByParam(id int) ([]sportnotes.NutritionOutputByParam, error)
+	GetNutritionsByParam(id int, startpoint, endpoint string) ([]sportnotes.NutritionOutputByParam, error)
 	// UpdateNutrition(id int, input sportnotes.UpdNutrition) error
 	DeleteNutrition(id int) error
 }
@@ -48,6 +56,7 @@ type WorkoutList interface {
 
 type Repository struct {
 	// Authorisation
+	FoodList
 	NutritionList
 	TrainingList
 	UserList
@@ -56,6 +65,7 @@ type Repository struct {
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
+		FoodList:      NewFoodsListPostgres(db),
 		NutritionList: NewNutritionListPostgres(db),
 		TrainingList:  NewTrainingsListPostgres(db),
 		WorkoutList:   NewWorkoutsListPostgres(db),

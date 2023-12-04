@@ -30,6 +30,12 @@ CREATE TABLE nutritions (
   created_at DATE
 );
 
+CREATE TABLE foods (
+  id INT PRIMARY KEY,
+  id_nutrition INT references nutritions(id) on delete cascade not null,
+  name VARCHAR(50)
+);
+
 
 
 DROP TABLE users;

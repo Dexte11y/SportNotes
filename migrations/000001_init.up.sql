@@ -22,3 +22,16 @@ CREATE TABLE trainings (
   repetitions INT,
   weight INT
 );
+
+CREATE TABLE nutritions (
+  id INT PRIMARY KEY,
+  id_user INT references users(id) on delete cascade not null,
+  type VARCHAR(50),
+  created_at DATE
+);
+
+CREATE TABLE foods (
+  id INT PRIMARY KEY,
+  id_nutrition INT references nutritions(id) on delete cascade not null,
+  name VARCHAR(50)
+);

@@ -33,3 +33,7 @@ type newTreaningResponse struct {
 type newNutritionResponse struct {
 	Id int `json:"id" swaggertype:"primitive,integer"`
 }
+
+type newFoodResponse struct {
+	Id int `json:"id" swaggertype:"primitive,integer"`
+}
