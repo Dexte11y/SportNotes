@@ -18,13 +18,21 @@ func NewWorkoutsListPostgres(db *sqlx.DB) *WorkoutsListPostgres {
 }
 
 func (r *WorkoutsListPostgres) CreateWorkout(input sportnotes.Workout) (int, error) {
+	var trainingsList []sportnotes.Training
 	var id int
 	currentData := time.Now().UTC()
 
-	query := fmt.Sprintf("INSERT INTO %s (id, id_user, type, created_at) VALUES ($1, $2, $3, $4) RETURNING id", workoutsTable)
+	trainingsList = append(trainingsList, input.TrainList...)
 
-	row := r.db.QueryRow(query, input.Id, input.IdUser, input.Type, currentData)
+	queryWorkouts := fmt.Sprintf("INSERT INTO %s (id, id_user, type, created_at) VALUES ($1, $2, $3, $4) RETURNING id", workoutsTable)
+	row := r.db.QueryRow(queryWorkouts, input.Id, input.IdUser, input.Type, currentData)
 	if err := row.Scan(&id); err != nil {
+		return 0, err
+	}
+
+	queryTrainings := fmt.Sprintf("INSERT INTO %s (id, id_workout, name, approaches, repetitions, weight) VALUES (:id, :id_workout, :name, :approaches, :repetitions, :weight)", trainingsTable)
+	_, err := r.db.NamedExec(queryTrainings, trainingsList)
+	if err != nil {
 		return 0, err
 	}
 
@@ -40,11 +48,16 @@ func (r *WorkoutsListPostgres) GetWorkoutsByParam(id int, interval string) ([]sp
 	previousDate := currentDate.Add(intervalMap[interval])
 
 	queryWorkouts := fmt.Sprintf("SELECT id, id_user, type, created_at FROM %s WHERE id_user = $1 AND created_at >= $2 AND created_at <= $3", workoutsTable)
-	r.db.Select(&workoutsList, queryWorkouts, id, previousDate, currentDate)
+	err := r.db.Select(&workoutsList, queryWorkouts, id, previousDate, currentDate)
+	if err != nil {
+		return nil, err
+	}
 
 	queryTrainings := fmt.Sprintf("SELECT id, id_workout, name, approaches, repetitions, weight FROM %s", trainingsTable)
-	r.db.Select(&trainingsList, queryTrainings)
-
+	err = r.db.Select(&trainingsList, queryTrainings)
+	if err != nil {
+		return nil, err
+	}
 	mergetWorkouts := make([]sportnotes.WorkoutOutputByParam, 0)
 	for _, valueWorkouts := range workoutsList {
 		for _, valueTrainings := range trainingsList {

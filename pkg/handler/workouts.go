@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"sportnotes"
 	"strconv"
@@ -24,6 +25,8 @@ func (h *Handler) createWorkout(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
+
+	fmt.Println(input)
 
 	id, err := h.services.WorkoutList.CreateWorkout(input)
 	if err != nil {

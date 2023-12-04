@@ -5,10 +5,11 @@ import (
 )
 
 type Workout struct {
-	Id        int       `json:"id" db:"id" binding:"required"`
-	IdUser    int       `json:"idUser" db:"id_user" binding:"required"`
-	Type      string    `json:"type" db:"type" binding:"required"`
-	CreatedAt time.Time `json:"createdAt" db:"created_at"`
+	Id        int        `json:"id" db:"id" binding:"required"`
+	IdUser    int        `json:"idUser" db:"id_user" binding:"required"`
+	Type      string     `json:"type" db:"type" binding:"required"`
+	CreatedAt time.Time  `json:"createdAt" db:"created_at"`
+	TrainList []Training `json:"trainList"`
 }
 
 type WorkoutOutputByParam struct {
