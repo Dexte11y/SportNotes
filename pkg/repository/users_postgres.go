@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	sportnotes "sportnotes"
+	"sportnotes/pkg/schemas"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -18,11 +18,11 @@ func NewUsersListPostgres(db *sqlx.DB) *UsersListPostgres {
 	return &UsersListPostgres{db: db}
 }
 
-func (r *UsersListPostgres) CreateUser(input sportnotes.User) (int, error) {
+func (r *UsersListPostgres) CreateUser(input schemas.User) (int, error) {
 	var id int
-	query := fmt.Sprintf("INSERT INTO %s (id, login, name, surname, email, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", usersTable)
+	query := fmt.Sprintf("INSERT INTO %s (login, name, surname, email, password) VALUES ($1, $2, $3, $4, $5) RETURNING id", usersTable)
 
-	row := r.db.QueryRow(query, input.Id, input.Login, input.Name, input.Surname, input.Email, input.Password)
+	row := r.db.QueryRow(query, input.Login, input.Name, input.Surname, input.Email, input.Password)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
@@ -30,8 +30,8 @@ func (r *UsersListPostgres) CreateUser(input sportnotes.User) (int, error) {
 	return id, nil
 }
 
-func (r *UsersListPostgres) GetAllUsers() ([]sportnotes.User, error) {
-	var users []sportnotes.User
+func (r *UsersListPostgres) GetAllUsers() ([]schemas.User, error) {
+	var users []schemas.User
 
 	query := fmt.Sprintf("SELECT id, login, name, surname, email, password FROM %s", usersTable)
 	err := r.db.Select(&users, query)
@@ -39,8 +39,8 @@ func (r *UsersListPostgres) GetAllUsers() ([]sportnotes.User, error) {
 	return users, err
 }
 
-func (r *UsersListPostgres) GetUserById(id int) (sportnotes.User, error) {
-	var user sportnotes.User
+func (r *UsersListPostgres) GetUserById(id int) (schemas.User, error) {
+	var user schemas.User
 
 	query := fmt.Sprintf("SELECT id, login, name, surname, email, password FROM %s WHERE id = $1", usersTable)
 	err := r.db.Get(&user, query, id)
@@ -48,7 +48,7 @@ func (r *UsersListPostgres) GetUserById(id int) (sportnotes.User, error) {
 	return user, err
 }
 
-func (r *UsersListPostgres) UpdateUser(id int, input sportnotes.UpdUser) error {
+func (r *UsersListPostgres) UpdateUser(id int, input schemas.UpdUser) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1

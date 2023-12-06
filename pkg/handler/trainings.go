@@ -1,16 +1,15 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
-	"sportnotes"
+	"sportnotes/pkg/schemas"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type getAllTrainingsResponse struct {
-	Data []sportnotes.Training `json:"data"`
+	Data []schemas.Training `json:"data"`
 }
 
 func (h *Handler) createTraining(c *gin.Context) {
@@ -20,12 +19,11 @@ func (h *Handler) createTraining(c *gin.Context) {
 	// 	return
 	// }
 
-	var input sportnotes.Training
+	var input schemas.Training
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	fmt.Println(input)
 
 	id, err := h.services.TrainingList.CreateTraining(input)
 	if err != nil {
@@ -78,7 +76,7 @@ func (h *Handler) updateTraining(c *gin.Context) {
 		return
 	}
 
-	var input sportnotes.UpdTraining
+	var input schemas.UpdTraining
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return

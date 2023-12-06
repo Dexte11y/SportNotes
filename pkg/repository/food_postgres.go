@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 
-	sportnotes "sportnotes"
+	"sportnotes/pkg/schemas"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -16,7 +16,7 @@ func NewFoodsListPostgres(db *sqlx.DB) *FoodsListPostgres {
 	return &FoodsListPostgres{db: db}
 }
 
-func (r *FoodsListPostgres) CreateFood(input sportnotes.Food) (int, error) {
+func (r *FoodsListPostgres) CreateFood(input schemas.Food) (int, error) {
 	var id int
 	query := fmt.Sprintf("INSERT INTO %s (id, id_nutrition, name) VALUES ($1, $2, $3) RETURNING  id ", foodsTable)
 	row := r.db.QueryRow(query, input.Id, input.IdNutrition, input.Name)
@@ -26,8 +26,8 @@ func (r *FoodsListPostgres) CreateFood(input sportnotes.Food) (int, error) {
 	return id, nil
 }
 
-func (r *FoodsListPostgres) GetAllFoods() ([]sportnotes.Food, error) {
-	var foods []sportnotes.Food
+func (r *FoodsListPostgres) GetAllFoods() ([]schemas.Food, error) {
+	var foods []schemas.Food
 
 	query := fmt.Sprintf("SELECT id, id_nutrition, name FROM %s", foodsTable)
 	err := r.db.Select(&foods, query)
@@ -35,8 +35,8 @@ func (r *FoodsListPostgres) GetAllFoods() ([]sportnotes.Food, error) {
 	return foods, err
 }
 
-func (r *FoodsListPostgres) GetFoodById(id int) (sportnotes.Food, error) {
-	var food sportnotes.Food
+func (r *FoodsListPostgres) GetFoodById(id int) (schemas.Food, error) {
+	var food schemas.Food
 
 	query := fmt.Sprintf("SELECT id, id_nutrition, name FROM %s WHERE id = $1", foodsTable)
 	err := r.db.Get(&food, query, id)
@@ -44,7 +44,7 @@ func (r *FoodsListPostgres) GetFoodById(id int) (sportnotes.Food, error) {
 	return food, err
 }
 
-// func (r *FoodsListPostgres) UpdateFood(id int, input sportnotes.UpdFood) error {
+// func (r *FoodsListPostgres) UpdateFood(id int, input schemas.UpdFood) error {
 // 	setValues := make([]string, 0)
 // 	args := make([]interface{}, 0)
 // 	argId := 1

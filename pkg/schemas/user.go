@@ -1,9 +1,9 @@
-package sportnotes
+package schemas
 
 import "errors"
 
 type User struct {
-	Id       int    `json:"id" db:"id" binding:"required"`
+	Id       int    `json:"id,omitempty" db:"id" binding:"-"`
 	Login    string `json:"login" db:"login" binding:"required"`
 	Name     string `json:"name" db:"name" binding:"required"`
 	Surname  string `json:"surname" db:"surname" binding:"required"`

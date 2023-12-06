@@ -3,6 +3,7 @@ package handler
 import (
 	"sportnotes/pkg/service"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,6 +18,7 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
+	router.Use(cors.Default())
 	// auth := router.Group("/auth")
 	// {
 	// 	auth.POST("/sign-up", h.signUp)
@@ -61,10 +63,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 		workouts := api.Group("/workouts")
 		{
-			workouts.POST("/", h.createWorkout)
+			workouts.POST("/:idUser", h.createWorkout)
 			workouts.GET("/:id", h.getWorkoutsByParam)
 			// workouts.PUT("/:id", h.updateWorkout)
-			workouts.DELETE("/:id", h.deleteWorkout)
+			workouts.DELETE("/delete/:id", h.deleteWorkout)
 		}
 
 		users := api.Group("/users")

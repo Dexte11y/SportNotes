@@ -1,7 +1,7 @@
 package service
 
 import (
-	sportnotes "sportnotes"
+	"sportnotes/pkg/schemas"
 
 	"sportnotes/pkg/repository"
 )
@@ -14,11 +14,11 @@ func NewNutritionsListService(repo repository.NutritionList) *NutritionsListServ
 	return &NutritionsListService{repo: repo}
 }
 
-func (s *NutritionsListService) CreateNutrition(input sportnotes.Nutrition) (int, error) {
+func (s *NutritionsListService) CreateNutrition(input schemas.Nutrition) (int, error) {
 	return s.repo.CreateNutrition(input)
 }
 
-func (s *NutritionsListService) GetNutritionsByParam(id int, startpoint, endpoint string) ([]sportnotes.NutritionOutputByParam, error) {
+func (s *NutritionsListService) GetNutritionsByParam(id int, startpoint, endpoint string) ([]schemas.Nutrition, error) {
 	return s.repo.GetNutritionsByParam(id, startpoint, endpoint)
 }
 

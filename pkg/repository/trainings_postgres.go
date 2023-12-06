@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	sportnotes "sportnotes"
+	"sportnotes/pkg/schemas"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -18,18 +18,18 @@ func NewTrainingsListPostgres(db *sqlx.DB) *TrainingsListPostgres {
 	return &TrainingsListPostgres{db: db}
 }
 
-func (r *TrainingsListPostgres) CreateTraining(input sportnotes.Training) (int, error) {
+func (r *TrainingsListPostgres) CreateTraining(input schemas.Training) (int, error) {
 	var id int
-	query := fmt.Sprintf("INSERT INTO %s (id, id_workout, name, approaches, repetitions, weight) VALUES ($1, $2, $3, $4, $5, $6) RETURNING  id ", trainingsTable)
-	row := r.db.QueryRow(query, input.Id, input.IdWorkout, input.Name, input.Approaches, input.Repetitions, input.Weight)
+	query := fmt.Sprintf("INSERT INTO %s (name, approaches, repetitions, weight) VALUES ($1, $2, $3, $4) RETURNING  id ", trainingsTable)
+	row := r.db.QueryRow(query, input.Name, input.Approaches, input.Repetitions, input.Weight)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
 	return id, nil
 }
 
-func (r *TrainingsListPostgres) GetAllTrainings() ([]sportnotes.Training, error) {
-	var trainings []sportnotes.Training
+func (r *TrainingsListPostgres) GetAllTrainings() ([]schemas.Training, error) {
+	var trainings []schemas.Training
 
 	query := fmt.Sprintf("SELECT id, id_workout ,name, approaches, repetitions, weight FROM %s", trainingsTable)
 	err := r.db.Select(&trainings, query)
@@ -37,8 +37,8 @@ func (r *TrainingsListPostgres) GetAllTrainings() ([]sportnotes.Training, error)
 	return trainings, err
 }
 
-func (r *TrainingsListPostgres) GetTrainingById(id int) (sportnotes.Training, error) {
-	var training sportnotes.Training
+func (r *TrainingsListPostgres) GetTrainingById(id int) (schemas.Training, error) {
+	var training schemas.Training
 
 	query := fmt.Sprintf("SELECT id, id_workout ,name, approaches, repetitions, weight FROM %s WHERE id = $1", trainingsTable)
 	err := r.db.Get(&training, query, id)
@@ -46,7 +46,7 @@ func (r *TrainingsListPostgres) GetTrainingById(id int) (sportnotes.Training, er
 	return training, err
 }
 
-func (r *TrainingsListPostgres) UpdateTraining(id int, input sportnotes.UpdTraining) error {
+func (r *TrainingsListPostgres) UpdateTraining(id int, input schemas.UpdTraining) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1

@@ -1,7 +1,7 @@
 package service
 
 import (
-	sportnotes "sportnotes"
+	"sportnotes/pkg/schemas"
 
 	"sportnotes/pkg/repository"
 )
@@ -14,11 +14,11 @@ func NewWorkoutsListService(repo repository.WorkoutList) *WorkoutsListService {
 	return &WorkoutsListService{repo: repo}
 }
 
-func (s *WorkoutsListService) CreateWorkout(input sportnotes.Workout) (int, error) {
-	return s.repo.CreateWorkout(input)
+func (s *WorkoutsListService) CreateWorkout(idUser int, input schemas.Workout) (int, error) {
+	return s.repo.CreateWorkout(idUser, input)
 }
 
-func (s *WorkoutsListService) GetWorkoutsByParam(id int, input string) ([]sportnotes.WorkoutOutputByParam, error) {
+func (s *WorkoutsListService) GetWorkoutsByParam(id int, input string) ([]schemas.Workout, error) {
 	return s.repo.GetWorkoutsByParam(id, input)
 }
 

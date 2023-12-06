@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	sportnotes "sportnotes"
+	"sportnotes/pkg/schemas"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -17,8 +17,8 @@ func NewNutritionListPostgres(db *sqlx.DB) *NutritionsListPostgres {
 	return &NutritionsListPostgres{db: db}
 }
 
-func (r *NutritionsListPostgres) CreateNutrition(input sportnotes.Nutrition) (int, error) {
-	var foodList []sportnotes.Food
+func (r *NutritionsListPostgres) CreateNutrition(input schemas.Nutrition) (int, error) {
+	var foodList []schemas.Food
 	var id int
 	currentData := time.Now().UTC()
 
@@ -39,9 +39,9 @@ func (r *NutritionsListPostgres) CreateNutrition(input sportnotes.Nutrition) (in
 	return id, nil
 }
 
-func (r *NutritionsListPostgres) GetNutritionsByParam(id int, startpoint, endpoint string) ([]sportnotes.NutritionOutputByParam, error) {
-	var nutritionsList []sportnotes.NutritionOutputByParam
-	var foodsList []sportnotes.FoodOutput
+func (r *NutritionsListPostgres) GetNutritionsByParam(id int, startpoint, endpoint string) ([]schemas.Nutrition, error) {
+	var nutritionsList []schemas.Nutrition
+	var foodsList []schemas.Food
 
 	queryNutritions := fmt.Sprintf("SELECT id, id_user, type, created_at FROM %s WHERE id_user = $1 AND created_at >= $2 AND created_at <= $3", nutritionsTable)
 	r.db.Select(&nutritionsList, queryNutritions, id, startpoint, endpoint)
@@ -49,7 +49,7 @@ func (r *NutritionsListPostgres) GetNutritionsByParam(id int, startpoint, endpoi
 	queryFood := fmt.Sprintf("SELECT id, id_nutrition, name FROM %s", foodsTable)
 	r.db.Select(&foodsList, queryFood)
 
-	mergetNutritions := make([]sportnotes.NutritionOutputByParam, 0)
+	mergetNutritions := make([]schemas.Nutrition, 0)
 	for _, valueNutritions := range nutritionsList {
 		for _, valueFoods := range foodsList {
 			if valueNutritions.Id == valueFoods.IdNutrition {
@@ -62,7 +62,7 @@ func (r *NutritionsListPostgres) GetNutritionsByParam(id int, startpoint, endpoi
 	return mergetNutritions, nil
 }
 
-// func (r *NutritionsListPostgres) UpdateNutrition(id int, input sportnotes.UpdWorkout) error {
+// func (r *NutritionsListPostgres) UpdateNutrition(id int, input schemas.UpdWorkout) error {
 // 	setValues := make([]string, 0)
 // 	args := make([]interface{}, 0)
 // 	argId := 1

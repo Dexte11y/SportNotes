@@ -1,9 +1,8 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
-	"sportnotes"
+	"sportnotes/pkg/schemas"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -19,16 +18,19 @@ func (h *Handler) createWorkout(c *gin.Context) {
 	// 	newErrorResponse(c, http.StatusInternalServerError, err.Error())
 	// 	return
 	// }
+	idUser, err := strconv.Atoi(c.Param("idUser"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+		return
+	}
 
-	var input sportnotes.Workout
+	var input schemas.Workout
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	fmt.Println(input)
-
-	id, err := h.services.WorkoutList.CreateWorkout(input)
+	id, err := h.services.WorkoutList.CreateWorkout(idUser, input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

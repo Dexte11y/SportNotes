@@ -2,7 +2,7 @@ package handler
 
 import (
 	"net/http"
-	"sportnotes"
+	"sportnotes/pkg/schemas"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +19,7 @@ func (h *Handler) createNutrition(c *gin.Context) {
 	// 	return
 	// }
 
-	var input sportnotes.Nutrition
+	var input schemas.Nutrition
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return

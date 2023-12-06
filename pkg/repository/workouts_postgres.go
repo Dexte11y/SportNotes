@@ -2,9 +2,8 @@ package repository
 
 import (
 	"fmt"
+	"sportnotes/pkg/schemas"
 	"time"
-
-	sportnotes "sportnotes"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -17,31 +16,31 @@ func NewWorkoutsListPostgres(db *sqlx.DB) *WorkoutsListPostgres {
 	return &WorkoutsListPostgres{db: db}
 }
 
-func (r *WorkoutsListPostgres) CreateWorkout(input sportnotes.Workout) (int, error) {
-	var trainingsList []sportnotes.Training
-	var id int
+func (r *WorkoutsListPostgres) CreateWorkout(idUser int, input schemas.Workout) (int, error) {
+	var trainingsList []schemas.Training
+	var idWorkout int
 	currentData := time.Now().UTC()
 
 	trainingsList = append(trainingsList, input.TrainList...)
 
-	queryWorkouts := fmt.Sprintf("INSERT INTO %s (id, id_user, type, created_at) VALUES ($1, $2, $3, $4) RETURNING id", workoutsTable)
-	row := r.db.QueryRow(queryWorkouts, input.Id, input.IdUser, input.Type, currentData)
-	if err := row.Scan(&id); err != nil {
+	queryWorkouts := fmt.Sprintf("INSERT INTO %s (id_user, type, created_at) VALUES ($1, $2, $3) RETURNING id", workoutsTable)
+	row := r.db.QueryRow(queryWorkouts, idUser, input.Type, currentData)
+	if err := row.Scan(&idWorkout); err != nil {
 		return 0, err
 	}
 
-	queryTrainings := fmt.Sprintf("INSERT INTO %s (id, id_workout, name, approaches, repetitions, weight) VALUES (:id, :id_workout, :name, :approaches, :repetitions, :weight)", trainingsTable)
+	queryTrainings := fmt.Sprintf("INSERT INTO %s (id_workout, name, approaches, repetitions, weight) VALUES (%d, :name, :approaches, :repetitions, :weight)", trainingsTable, idWorkout)
 	_, err := r.db.NamedExec(queryTrainings, trainingsList)
 	if err != nil {
 		return 0, err
 	}
 
-	return id, nil
+	return idWorkout, nil
 }
 
-func (r *WorkoutsListPostgres) GetWorkoutsByParam(id int, interval string) ([]sportnotes.WorkoutOutputByParam, error) {
-	var workoutsList []sportnotes.WorkoutOutputByParam
-	var trainingsList []sportnotes.TrainingOutput
+func (r *WorkoutsListPostgres) GetWorkoutsByParam(id int, interval string) ([]schemas.Workout, error) {
+	var workoutsList []schemas.Workout
+	var trainingsList []schemas.Training
 	currentDate := time.Now().UTC()
 
 	var intervalMap = map[string]time.Duration{"all": -876000 * time.Hour, "year": -8760 * time.Hour, "month": -720 * time.Hour, "week": -168 * time.Hour}
@@ -58,7 +57,7 @@ func (r *WorkoutsListPostgres) GetWorkoutsByParam(id int, interval string) ([]sp
 	if err != nil {
 		return nil, err
 	}
-	mergetWorkouts := make([]sportnotes.WorkoutOutputByParam, 0)
+	mergetWorkouts := make([]schemas.Workout, 0)
 	for _, valueWorkouts := range workoutsList {
 		for _, valueTrainings := range trainingsList {
 			if valueWorkouts.Id == valueTrainings.IdWorkout {
@@ -71,7 +70,7 @@ func (r *WorkoutsListPostgres) GetWorkoutsByParam(id int, interval string) ([]sp
 	return mergetWorkouts, nil
 }
 
-// func (r *WorkoutsListPostgres) UpdateWorkout(id int, input sportnotes.UpdWorkout) error {
+// func (r *WorkoutsListPostgres) UpdateWorkout(id int, input schemas.UpdWorkout) error {
 // 	setValues := make([]string, 0)
 // 	args := make([]interface{}, 0)
 // 	argId := 1

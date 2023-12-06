@@ -1,7 +1,7 @@
 package service
 
 import (
-	sportnotes "sportnotes"
+	"sportnotes/pkg/schemas"
 
 	"sportnotes/pkg/repository"
 )
@@ -14,19 +14,19 @@ func NewUsersListService(repo repository.UserList) *UsersListService {
 	return &UsersListService{repo: repo}
 }
 
-func (s *UsersListService) CreateUser(input sportnotes.User) (int, error) {
+func (s *UsersListService) CreateUser(input schemas.User) (int, error) {
 	return s.repo.CreateUser(input)
 }
 
-func (s *UsersListService) GetAllUsers() ([]sportnotes.User, error) {
+func (s *UsersListService) GetAllUsers() ([]schemas.User, error) {
 	return s.repo.GetAllUsers()
 }
 
-func (s *UsersListService) GetUserById(id int) (sportnotes.User, error) {
+func (s *UsersListService) GetUserById(id int) (schemas.User, error) {
 	return s.repo.GetUserById(id)
 }
 
-func (s *UsersListService) UpdateUser(id int, input sportnotes.UpdUser) error {
+func (s *UsersListService) UpdateUser(id int, input schemas.UpdUser) error {
 	if err := input.Validate(); err != nil {
 		return err
 	}

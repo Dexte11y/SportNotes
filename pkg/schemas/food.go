@@ -1,18 +1,12 @@
-package sportnotes
+package schemas
 
 import (
 	"time"
 )
 
 type Food struct {
-	Id          int    `json:"id" db:"id" binding:"required"`
-	IdNutrition int    `json:"idNutrition" db:"id_nutrition" binding:"required"`
-	Name        string `json:"name" db:"name" binding:"required"`
-}
-
-type FoodOutput struct {
-	Id          int    `json:"idFood" db:"id" binding:"required"`
-	IdNutrition int    `json:"idNutrition" db:"id_nutrition" binding:"required"`
+	Id          int    `json:"id,omitempty" db:"id" binding:"-"`
+	IdNutrition int    `json:"idNutrition,omitempty" db:"id_nutrition" binding:"-"`
 	Name        string `json:"name" db:"name" binding:"required"`
 }
 

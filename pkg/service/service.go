@@ -1,7 +1,7 @@
 package service
 
 import (
-	sportnotes "sportnotes"
+	"sportnotes/pkg/schemas"
 
 	"sportnotes/pkg/repository"
 )
@@ -20,39 +20,39 @@ import (
 // }
 
 type FoodList interface {
-	CreateFood(food sportnotes.Food) (int, error)
-	GetAllFoods() ([]sportnotes.Food, error)
-	GetFoodById(id int) (sportnotes.Food, error)
+	CreateFood(food schemas.Food) (int, error)
+	GetAllFoods() ([]schemas.Food, error)
+	GetFoodById(id int) (schemas.Food, error)
 	// UpdateFood(id int, input sportnotes.UpdFood) error
 	DeleteFood(id int) error
 }
 
 type NutritionList interface {
-	CreateNutrition(nutrition sportnotes.Nutrition) (int, error)
-	GetNutritionsByParam(id int, startpoint, endpoint string) ([]sportnotes.NutritionOutputByParam, error)
+	CreateNutrition(nutrition schemas.Nutrition) (int, error)
+	GetNutritionsByParam(id int, startpoint, endpoint string) ([]schemas.Nutrition, error)
 	// UpdateNutrition(id int, input sportnotes.UpdNutrition) error
 	DeleteNutrition(id int) error
 }
 
 type TrainingList interface {
-	CreateTraining(training sportnotes.Training) (int, error)
-	GetAllTrainings() ([]sportnotes.Training, error)
-	GetTrainingById(id int) (sportnotes.Training, error)
-	UpdateTraining(id int, input sportnotes.UpdTraining) error
+	CreateTraining(training schemas.Training) (int, error)
+	GetAllTrainings() ([]schemas.Training, error)
+	GetTrainingById(id int) (schemas.Training, error)
+	UpdateTraining(id int, input schemas.UpdTraining) error
 	DeleteTraining(id int) error
 }
 
 type UserList interface {
-	CreateUser(user sportnotes.User) (int, error)
-	GetAllUsers() ([]sportnotes.User, error)
-	GetUserById(id int) (sportnotes.User, error)
-	UpdateUser(id int, input sportnotes.UpdUser) error
+	CreateUser(user schemas.User) (int, error)
+	GetAllUsers() ([]schemas.User, error)
+	GetUserById(id int) (schemas.User, error)
+	UpdateUser(id int, input schemas.UpdUser) error
 	DeleteUser(id int) error
 }
 
 type WorkoutList interface {
-	CreateWorkout(workout sportnotes.Workout) (int, error)
-	GetWorkoutsByParam(id int, input string) ([]sportnotes.WorkoutOutputByParam, error)
+	CreateWorkout(idUser int, workout schemas.Workout) (int, error)
+	GetWorkoutsByParam(id int, input string) ([]schemas.Workout, error)
 	// UpdateWorkout(id int, input sportnotes.UpdWorkout) error
 	DeleteWorkout(id int) error
 }

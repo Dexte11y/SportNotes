@@ -1,5 +1,5 @@
 CREATE TABLE users (
-  id INT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   login VARCHAR(20),
   name VARCHAR(20),
   surname VARCHAR(20),
@@ -8,14 +8,14 @@ CREATE TABLE users (
 );
 
 CREATE TABLE workouts (
-  id INT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   id_user INT references users(id) on delete cascade not null,
   type VARCHAR(50),
   created_at DATE
 );
 
 CREATE TABLE trainings (
-  id INT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   id_workout INT references workouts(id) on delete cascade not null,
   name VARCHAR(50),
   approaches INT,
@@ -24,14 +24,14 @@ CREATE TABLE trainings (
 );
 
 CREATE TABLE nutritions (
-  id INT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   id_user INT references users(id) on delete cascade not null,
   type VARCHAR(50),
   created_at DATE
 );
 
 CREATE TABLE foods (
-  id INT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   id_nutrition INT references nutritions(id) on delete cascade not null,
   name VARCHAR(50)
 );

@@ -3,14 +3,14 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"sportnotes"
+	"sportnotes/pkg/schemas"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type getAllFoodsResponse struct {
-	Data []sportnotes.Food `json:"data"`
+	Data []schemas.Food `json:"data"`
 }
 
 func (h *Handler) createFood(c *gin.Context) {
@@ -20,7 +20,7 @@ func (h *Handler) createFood(c *gin.Context) {
 	// 	return
 	// }
 
-	var input sportnotes.Food
+	var input schemas.Food
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -78,7 +78,7 @@ func (h *Handler) updateFood(c *gin.Context) {
 		return
 	}
 
-	var input sportnotes.UpdTraining
+	var input schemas.UpdTraining
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return

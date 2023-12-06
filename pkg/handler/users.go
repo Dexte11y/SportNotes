@@ -2,14 +2,14 @@ package handler
 
 import (
 	"net/http"
-	"sportnotes"
+	"sportnotes/pkg/schemas"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type getAllUsersResponse struct {
-	Data []sportnotes.User `json:"data"`
+	Data []schemas.User `json:"data"`
 }
 
 func (h *Handler) createUser(c *gin.Context) {
@@ -19,7 +19,7 @@ func (h *Handler) createUser(c *gin.Context) {
 	// 	return
 	// }
 
-	var input sportnotes.User
+	var input schemas.User
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -76,7 +76,7 @@ func (h *Handler) updateUser(c *gin.Context) {
 		return
 	}
 
-	var input sportnotes.UpdUser
+	var input schemas.UpdUser
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
