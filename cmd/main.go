@@ -4,22 +4,24 @@ import (
 	"context"
 	"os"
 	"os/signal"
-	sportnotes "sportnotes"
+	"sportnotes"
+	"sportnotes/configs"
 	"sportnotes/pkg/handler"
 	"sportnotes/pkg/repository"
 	"sportnotes/pkg/service"
 	"syscall"
 
+	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 func main() {
+	var cfg configs.Config
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
-	if err := initConfig(); err != nil {
+	if err := cleanenv.ReadConfig("configs/config.yml", &cfg); err != nil {
 		logrus.Fatalf("error loading config file:%s", err.Error())
 	}
 
@@ -27,16 +29,7 @@ func main() {
 		logrus.Fatalf("error loading env variables:%s", err.Error())
 	}
 
-	db, err := repository.NewPostgresDB(repository.Config{
-		Host:     viper.GetString("db.host"),
-		Port:     viper.GetString("db.port"),
-		Username: viper.GetString("db.username"),
-		DBName:   viper.GetString("db.dbname"),
-		SSLMode:  viper.GetString("db.sslmode"),
-		Password: viper.GetString("db.password"),
-		// Password: os.Getenv("DB_PASSWORD"),
-	})
-
+	db, err := repository.NewPostgresDB(cfg)
 	if err != nil {
 		logrus.Fatalf("database initializing failed:%s", err.Error())
 	}
@@ -47,7 +40,7 @@ func main() {
 
 	srv := new(sportnotes.Server)
 	go func() {
-		if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
+		if err := srv.Run(cfg.Server.Port, handlers.InitRoutes()); err != nil {
 			logrus.Fatalf("Server start error: %s", err.Error())
 		}
 	}()
@@ -67,10 +60,4 @@ func main() {
 	if err := db.Close(); err != nil {
 		logrus.Errorf("error occured on db connection close:%s", err.Error())
 	}
-}
-
-func initConfig() error {
-	viper.AddConfigPath("configs")
-	viper.SetConfigName("config")
-	return viper.ReadInConfig()
 }

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"sportnotes/configs"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -14,18 +15,9 @@ const (
 	foodsTable      = "foods"
 )
 
-type Config struct {
-	Host     string
-	Port     string
-	Username string
-	Password string
-	DBName   string
-	SSLMode  string
-}
-
-func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
+func NewPostgresDB(cfg configs.Config) (*sqlx.DB, error) {
 	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
-		cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode))
+		cfg.Db.Host, cfg.Db.Port, cfg.Db.Username, cfg.Db.DBName, cfg.Db.Password, cfg.Db.SSLMode))
 	if err != nil {
 		return nil, err
 	}

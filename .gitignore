@@ -24,3 +24,7 @@ TestResults.xml
 .env
 #Makefile
 Makefile.
+#database
+.database
+#docker
+docker-compose.yml
