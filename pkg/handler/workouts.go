@@ -8,16 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// type getWorkoutsByParamResponse struct {
-// 	Data []sportnotes.WorkoutOutputByParam `json:"data"`
-// }
-
 func (h *Handler) createWorkout(c *gin.Context) {
-	// _, err := getDoctorId(c)
-	// if err != nil {
-	// 	newErrorResponse(c, http.StatusInternalServerError, err.Error())
-	// 	return
-	// }
 	idUser, err := strconv.Atoi(c.Param("idUser"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
@@ -36,8 +27,8 @@ func (h *Handler) createWorkout(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, newWorkoutResponse{
-		Id: id,
+	c.JSON(http.StatusOK, newIDResponse{
+		ID: id,
 	})
 }
 
@@ -51,7 +42,7 @@ func (h *Handler) getWorkoutsByParam(c *gin.Context) {
 	input := c.DefaultQuery("interval", "none")
 	if input == "" {
 		input = "week"
-	} //сделать обработку ошибки
+	}
 
 	workouts, err := h.services.WorkoutList.GetWorkoutsByParam(id, input)
 	if err != nil {
@@ -63,11 +54,6 @@ func (h *Handler) getWorkoutsByParam(c *gin.Context) {
 }
 
 // func (h *Handler) updateWorkout(c *gin.Context) {
-// 	// _, err := getDoctorId(c)
-// 	// if err != nil {
-// 	// 	return
-// 	// }
-
 // 	id, err := strconv.Atoi(c.Param("id"))
 // 	if err != nil {
 // 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
@@ -91,11 +77,6 @@ func (h *Handler) getWorkoutsByParam(c *gin.Context) {
 // }
 
 func (h *Handler) deleteWorkout(c *gin.Context) {
-	// _, err := getDoctorId(c)
-	// if err != nil {
-	// 	return
-	// }
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")

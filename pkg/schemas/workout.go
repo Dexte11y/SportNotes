@@ -5,11 +5,11 @@ import (
 )
 
 type Workout struct {
-	Id        int        `json:"id,omitempty" db:"id" binding:"-"`
-	IdUser    int        `json:"idUser,omitempty" db:"id_user" binding:"-"`
-	Type      string     `json:"type" db:"type" binding:"required"`
-	CreatedAt time.Time  `json:"createdAt" db:"created_at"`
-	TrainList []Training `json:"trainList"`
+	ID           int        `json:"id,omitempty" db:"id" binding:"-"`
+	IDUser       int        `json:"idUser,omitempty" db:"id_user" binding:"-"`
+	Type         string     `json:"type" db:"type" binding:"required"`
+	CreatedAt    time.Time  `json:"createdAt" db:"created_at"`
+	ActivityList []Activity `json:"activityList"`
 }
 
 // type UpdWorkout struct {

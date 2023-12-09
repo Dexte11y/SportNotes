@@ -14,8 +14,8 @@ func NewNutritionsListService(repo repository.NutritionList) *NutritionsListServ
 	return &NutritionsListService{repo: repo}
 }
 
-func (s *NutritionsListService) CreateNutrition(input schemas.Nutrition) (int, error) {
-	return s.repo.CreateNutrition(input)
+func (s *NutritionsListService) CreateNutrition(idUser int, input schemas.Nutrition) (int, error) {
+	return s.repo.CreateNutrition(idUser, input)
 }
 
 func (s *NutritionsListService) GetNutritionsByParam(id int, startpoint, endpoint string) ([]schemas.Nutrition, error) {

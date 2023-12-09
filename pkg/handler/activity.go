@@ -8,54 +8,42 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type getAllTrainingsResponse struct {
-	Data []schemas.Training `json:"data"`
-}
-
-func (h *Handler) createTraining(c *gin.Context) {
-	// _, err := getDoctorId(c)
-	// if err != nil {
-	// 	newErrorResponse(c, http.StatusInternalServerError, err.Error())
-	// 	return
-	// }
-
-	var input schemas.Training
+func (h *Handler) createActivity(c *gin.Context) {
+	var input schemas.Activity
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	id, err := h.services.TrainingList.CreateTraining(input)
+	id, err := h.services.ActivityList.CreateActivity(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, newUserResponse{
-		Id: id,
+	c.JSON(http.StatusOK, newIDResponse{
+		ID: id,
 	})
 }
 
-func (h *Handler) getAllTrainings(c *gin.Context) {
-	trainings, err := h.services.TrainingList.GetAllTrainings()
+func (h *Handler) getAllActivity(c *gin.Context) {
+	activity, err := h.services.ActivityList.GetAllActivity()
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, getAllTrainingsResponse{
-		Data: trainings,
-	})
+	c.JSON(http.StatusOK, activity)
 }
 
-func (h *Handler) getTrainingById(c *gin.Context) {
+func (h *Handler) getActivityByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
 		return
 	}
 
-	user, err := h.services.TrainingList.GetTrainingById(id)
+	user, err := h.services.ActivityList.GetActivityByID(id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -64,7 +52,7 @@ func (h *Handler) getTrainingById(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-func (h *Handler) updateTraining(c *gin.Context) {
+func (h *Handler) updateActivity(c *gin.Context) {
 	// _, err := getDoctorId(c)
 	// if err != nil {
 	// 	return
@@ -76,13 +64,13 @@ func (h *Handler) updateTraining(c *gin.Context) {
 		return
 	}
 
-	var input schemas.UpdTraining
+	var input schemas.UpdActivity
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if err := h.services.TrainingList.UpdateTraining(id, input); err != nil {
+	if err := h.services.ActivityList.UpdateActivity(id, input); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -92,7 +80,7 @@ func (h *Handler) updateTraining(c *gin.Context) {
 	})
 }
 
-func (h *Handler) deleteTraining(c *gin.Context) {
+func (h *Handler) deleteActivity(c *gin.Context) {
 	// _, err := getDoctorId(c)
 	// if err != nil {
 	// 	return
@@ -104,7 +92,7 @@ func (h *Handler) deleteTraining(c *gin.Context) {
 		return
 	}
 
-	err = h.services.TrainingList.DeleteTraining(id)
+	err = h.services.ActivityList.DeleteActivity(id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

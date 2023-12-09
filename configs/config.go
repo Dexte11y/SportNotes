@@ -4,7 +4,7 @@ type Config struct {
 	Server struct {
 		Port string
 	} `yaml:"server"`
-	Db struct {
+	DB struct {
 		Host     string
 		Port     string
 		Username string

@@ -19,46 +19,39 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
 	router.Use(cors.Default())
+
 	// auth := router.Group("/auth")
 	// {
 	// 	auth.POST("/sign-up", h.signUp)
 	// 	auth.POST("/sign-in", h.signIn)
 	// }
 
-	// api := router.Group("/api", h.doctorIdentity)
-	// , h.userIdentity
 	api := router.Group("/api")
 	{
-		// doctors := api.Group("/doctors")
-		// {
-		// 	doctors.GET("/", h.getAllDoctors)
-		// 	doctors.GET("/:id", h.getDoctorById)
-		// }
-
 		food := api.Group("/foods")
 		{
 			food.POST("/", h.createFood)
 			food.GET("/", h.getAllFoods)
-			food.GET("/:id", h.getFoodById)
+			food.GET("/:id", h.getFoodByID)
 			// food.PUT("/:id", h.updateFood)
 			food.DELETE("/:id", h.deleteFood)
 		}
 
 		nutritions := api.Group("/nutritions")
 		{
-			nutritions.POST("/", h.createNutrition)
+			nutritions.POST("/:idUser", h.createNutrition)
 			nutritions.GET("/:id", h.getNutritionsByParam)
 			// nutritions.PUT("/:id", h.updateNutrition)
 			nutritions.DELETE("/:id", h.deleteNutrition)
 		}
 
-		trainings := api.Group("/trainings")
+		trainings := api.Group("/activity")
 		{
-			trainings.POST("/", h.createTraining)
-			trainings.GET("/", h.getAllTrainings)
-			trainings.GET("/:id", h.getTrainingById)
-			trainings.PUT("/:id", h.updateTraining)
-			trainings.DELETE("/:id", h.deleteTraining)
+			trainings.POST("/", h.createActivity)
+			trainings.GET("/", h.getAllActivity)
+			trainings.GET("/:id", h.getActivityByID)
+			trainings.PUT("/:id", h.updateActivity)
+			trainings.DELETE("/:id", h.deleteActivity)
 		}
 
 		workouts := api.Group("/workouts")
@@ -73,10 +66,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			users.POST("/", h.createUser)
 			users.GET("/", h.getAllUsers)
-			users.GET("/:id", h.getUserById)
+			users.GET("/:id", h.getUserByID)
 			users.PUT("/:id", h.updateUser)
 			users.DELETE("/:id", h.deleteUser)
-
 		}
 	}
 

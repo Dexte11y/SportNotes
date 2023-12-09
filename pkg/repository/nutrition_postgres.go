@@ -17,26 +17,26 @@ func NewNutritionListPostgres(db *sqlx.DB) *NutritionsListPostgres {
 	return &NutritionsListPostgres{db: db}
 }
 
-func (r *NutritionsListPostgres) CreateNutrition(input schemas.Nutrition) (int, error) {
+func (r *NutritionsListPostgres) CreateNutrition(idUser int, input schemas.Nutrition) (int, error) {
 	var foodList []schemas.Food
-	var id int
+	var idNutrition int
 	currentData := time.Now().UTC()
 
 	foodList = append(foodList, input.FoodList...)
 
-	queryNutritions := fmt.Sprintf("INSERT INTO %s (id, id_user, type, created_at) VALUES ($1, $2, $3, $4) RETURNING id", nutritionsTable)
-	row := r.db.QueryRow(queryNutritions, input.Id, input.IdUser, input.Type, currentData)
-	if err := row.Scan(&id); err != nil {
+	queryNutritions := fmt.Sprintf("INSERT INTO %s (id_user, type, created_at) VALUES ($1, $2, $3) RETURNING id", nutritionsTable)
+	row := r.db.QueryRow(queryNutritions, idUser, input.Type, currentData)
+	if err := row.Scan(&idNutrition); err != nil {
 		return 0, err
 	}
 
-	queryFoods := fmt.Sprintf("INSERT INTO %s (id, id_nutrition, name) VALUES (:id, :id_nutrition, :name)", foodsTable)
+	queryFoods := fmt.Sprintf("INSERT INTO %s (id_nutrition, name) VALUES (%d, :name)", foodsTable, idNutrition)
 	_, err := r.db.NamedExec(queryFoods, foodList)
 	if err != nil {
 		return 0, err
 	}
 
-	return id, nil
+	return idNutrition, nil
 }
 
 func (r *NutritionsListPostgres) GetNutritionsByParam(id int, startpoint, endpoint string) ([]schemas.Nutrition, error) {
@@ -52,7 +52,7 @@ func (r *NutritionsListPostgres) GetNutritionsByParam(id int, startpoint, endpoi
 	mergetNutritions := make([]schemas.Nutrition, 0)
 	for _, valueNutritions := range nutritionsList {
 		for _, valueFoods := range foodsList {
-			if valueNutritions.Id == valueFoods.IdNutrition {
+			if valueNutritions.ID == valueFoods.IDNutrition {
 				valueNutritions.FoodList = append(valueNutritions.FoodList, valueFoods)
 			}
 		}

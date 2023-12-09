@@ -39,7 +39,7 @@ func (r *UsersListPostgres) GetAllUsers() ([]schemas.User, error) {
 	return users, err
 }
 
-func (r *UsersListPostgres) GetUserById(id int) (schemas.User, error) {
+func (r *UsersListPostgres) GetUserByID(id int) (schemas.User, error) {
 	var user schemas.User
 
 	query := fmt.Sprintf("SELECT id, login, name, surname, email, password FROM %s WHERE id = $1", usersTable)
@@ -51,41 +51,41 @@ func (r *UsersListPostgres) GetUserById(id int) (schemas.User, error) {
 func (r *UsersListPostgres) UpdateUser(id int, input schemas.UpdUser) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
-	argId := 1
+	argID := 1
 
 	if input.Login != nil {
-		setValues = append(setValues, fmt.Sprintf("login=$%d", argId))
+		setValues = append(setValues, fmt.Sprintf("login=$%d", argID))
 		args = append(args, *input.Login)
-		argId++
+		argID++
 	}
 
 	if input.Name != nil {
-		setValues = append(setValues, fmt.Sprintf("name=$%d", argId))
+		setValues = append(setValues, fmt.Sprintf("name=$%d", argID))
 		args = append(args, *input.Name)
-		argId++
+		argID++
 	}
 
 	if input.Surname != nil {
-		setValues = append(setValues, fmt.Sprintf("surname=$%d", argId))
+		setValues = append(setValues, fmt.Sprintf("surname=$%d", argID))
 		args = append(args, *input.Surname)
-		argId++
+		argID++
 	}
 
 	if input.Email != nil {
-		setValues = append(setValues, fmt.Sprintf("email=$%d", argId))
+		setValues = append(setValues, fmt.Sprintf("email=$%d", argID))
 		args = append(args, *input.Email)
-		argId++
+		argID++
 	}
 
 	if input.Password != nil {
-		setValues = append(setValues, fmt.Sprintf("password=$%d", argId))
+		setValues = append(setValues, fmt.Sprintf("password=$%d", argID))
 		args = append(args, *input.Password)
-		argId++
+		argID++
 	}
 
 	setQuery := strings.Join(setValues, ", ")
 
-	query := fmt.Sprintf("UPDATE %s tl SET %s WHERE tl.id = $%d", usersTable, setQuery, argId)
+	query := fmt.Sprintf("UPDATE %s tl SET %s WHERE tl.id = $%d", usersTable, setQuery, argID)
 	args = append(args, id)
 
 	logrus.Debug("updateQuery: ", query)

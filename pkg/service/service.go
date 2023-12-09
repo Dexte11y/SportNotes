@@ -22,30 +22,30 @@ import (
 type FoodList interface {
 	CreateFood(food schemas.Food) (int, error)
 	GetAllFoods() ([]schemas.Food, error)
-	GetFoodById(id int) (schemas.Food, error)
+	GetFoodByID(id int) (schemas.Food, error)
 	// UpdateFood(id int, input sportnotes.UpdFood) error
 	DeleteFood(id int) error
 }
 
 type NutritionList interface {
-	CreateNutrition(nutrition schemas.Nutrition) (int, error)
+	CreateNutrition(idUser int, nutrition schemas.Nutrition) (int, error)
 	GetNutritionsByParam(id int, startpoint, endpoint string) ([]schemas.Nutrition, error)
 	// UpdateNutrition(id int, input sportnotes.UpdNutrition) error
 	DeleteNutrition(id int) error
 }
 
-type TrainingList interface {
-	CreateTraining(training schemas.Training) (int, error)
-	GetAllTrainings() ([]schemas.Training, error)
-	GetTrainingById(id int) (schemas.Training, error)
-	UpdateTraining(id int, input schemas.UpdTraining) error
-	DeleteTraining(id int) error
+type ActivityList interface {
+	CreateActivity(training schemas.Activity) (int, error)
+	GetAllActivity() ([]schemas.Activity, error)
+	GetActivityByID(id int) (schemas.Activity, error)
+	UpdateActivity(id int, input schemas.UpdActivity) error
+	DeleteActivity(id int) error
 }
 
 type UserList interface {
 	CreateUser(user schemas.User) (int, error)
 	GetAllUsers() ([]schemas.User, error)
-	GetUserById(id int) (schemas.User, error)
+	GetUserByID(id int) (schemas.User, error)
 	UpdateUser(id int, input schemas.UpdUser) error
 	DeleteUser(id int) error
 }
@@ -61,7 +61,7 @@ type Service struct {
 	// Authorisation
 	FoodList
 	NutritionList
-	TrainingList
+	ActivityList
 	WorkoutList
 	UserList
 }
@@ -70,7 +70,7 @@ func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		FoodList:      NewFoodsListService(repo.FoodList),
 		NutritionList: NewNutritionsListService(repo.NutritionList),
-		TrainingList:  NewTrainingsListService(repo.TrainingList),
+		ActivityList:  NewActivityListService(repo.ActivityList),
 		WorkoutList:   NewWorkoutsListService(repo.WorkoutList),
 		UserList:      NewUsersListService(repo.UserList),
 

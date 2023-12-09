@@ -22,8 +22,8 @@ func (s *UsersListService) GetAllUsers() ([]schemas.User, error) {
 	return s.repo.GetAllUsers()
 }
 
-func (s *UsersListService) GetUserById(id int) (schemas.User, error) {
-	return s.repo.GetUserById(id)
+func (s *UsersListService) GetUserByID(id int) (schemas.User, error) {
+	return s.repo.GetUserByID(id)
 }
 
 func (s *UsersListService) UpdateUser(id int, input schemas.UpdUser) error {

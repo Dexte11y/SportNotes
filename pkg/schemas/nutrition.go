@@ -5,8 +5,8 @@ import (
 )
 
 type Nutrition struct {
-	Id        int       `json:"id,omitempty" db:"id" binding:"-"`
-	IdUser    int       `json:"idUser,omitempty" db:"id_user" binding:"-"`
+	ID        int       `json:"id,omitempty" db:"id" binding:"-"`
+	IDUser    int       `json:"idUser,omitempty" db:"id_user" binding:"-"`
 	Type      string    `json:"type" db:"type" binding:"required"`
 	CreatedAt time.Time `json:"createdAt" db:"created_at"`
 	FoodList  []Food    `json:"foodList"`

@@ -8,17 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type getAllUsersResponse struct {
-	Data []schemas.User `json:"data"`
-}
-
 func (h *Handler) createUser(c *gin.Context) {
-	// _, err := getDoctorId(c)
-	// if err != nil {
-	// 	newErrorResponse(c, http.StatusInternalServerError, err.Error())
-	// 	return
-	// }
-
 	var input schemas.User
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -31,8 +21,8 @@ func (h *Handler) createUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, newUserResponse{
-		Id: id,
+	c.JSON(http.StatusOK, newIDResponse{
+		ID: id,
 	})
 }
 
@@ -43,19 +33,17 @@ func (h *Handler) getAllUsers(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, getAllUsersResponse{
-		Data: users,
-	})
+	c.JSON(http.StatusOK, users)
 }
 
-func (h *Handler) getUserById(c *gin.Context) {
+func (h *Handler) getUserByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
 		return
 	}
 
-	user, err := h.services.UserList.GetUserById(id)
+	user, err := h.services.UserList.GetUserByID(id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -65,11 +53,6 @@ func (h *Handler) getUserById(c *gin.Context) {
 }
 
 func (h *Handler) updateUser(c *gin.Context) {
-	// _, err := getDoctorId(c)
-	// if err != nil {
-	// 	return
-	// }
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
@@ -93,11 +76,6 @@ func (h *Handler) updateUser(c *gin.Context) {
 }
 
 func (h *Handler) deleteUser(c *gin.Context) {
-	// _, err := getDoctorId(c)
-	// if err != nil {
-	// 	return
-	// }
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")

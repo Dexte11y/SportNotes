@@ -22,8 +22,8 @@ func (s *FoodsListService) GetAllFoods() ([]schemas.Food, error) {
 	return s.repo.GetAllFoods()
 }
 
-func (s *FoodsListService) GetFoodById(id int) (schemas.Food, error) {
-	return s.repo.GetFoodById(id)
+func (s *FoodsListService) GetFoodByID(id int) (schemas.Food, error) {
+	return s.repo.GetFoodByID(id)
 }
 
 // func (s *FoodsListService) UpdateFood(id int, input schemas.UpdFood) error {

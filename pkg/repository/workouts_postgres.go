@@ -17,11 +17,11 @@ func NewWorkoutsListPostgres(db *sqlx.DB) *WorkoutsListPostgres {
 }
 
 func (r *WorkoutsListPostgres) CreateWorkout(idUser int, input schemas.Workout) (int, error) {
-	var trainingsList []schemas.Training
+	var activityList []schemas.Activity
 	var idWorkout int
 	currentData := time.Now().UTC()
 
-	trainingsList = append(trainingsList, input.TrainList...)
+	activityList = append(activityList, input.ActivityList...)
 
 	queryWorkouts := fmt.Sprintf("INSERT INTO %s (id_user, type, created_at) VALUES ($1, $2, $3) RETURNING id", workoutsTable)
 	row := r.db.QueryRow(queryWorkouts, idUser, input.Type, currentData)
@@ -29,8 +29,8 @@ func (r *WorkoutsListPostgres) CreateWorkout(idUser int, input schemas.Workout) 
 		return 0, err
 	}
 
-	queryTrainings := fmt.Sprintf("INSERT INTO %s (id_workout, name, approaches, repetitions, weight) VALUES (%d, :name, :approaches, :repetitions, :weight)", trainingsTable, idWorkout)
-	_, err := r.db.NamedExec(queryTrainings, trainingsList)
+	queryTrainings := fmt.Sprintf("INSERT INTO %s (id_workout, name, approaches, repetitions, weight) VALUES (%d, :name, :approaches, :repetitions, :weight)", activityTable, idWorkout)
+	_, err := r.db.NamedExec(queryTrainings, activityList)
 	if err != nil {
 		return 0, err
 	}
@@ -40,7 +40,7 @@ func (r *WorkoutsListPostgres) CreateWorkout(idUser int, input schemas.Workout) 
 
 func (r *WorkoutsListPostgres) GetWorkoutsByParam(id int, interval string) ([]schemas.Workout, error) {
 	var workoutsList []schemas.Workout
-	var trainingsList []schemas.Training
+	var trainingsList []schemas.Activity
 	currentDate := time.Now().UTC()
 
 	var intervalMap = map[string]time.Duration{"all": -876000 * time.Hour, "year": -8760 * time.Hour, "month": -720 * time.Hour, "week": -168 * time.Hour}
@@ -52,7 +52,7 @@ func (r *WorkoutsListPostgres) GetWorkoutsByParam(id int, interval string) ([]sc
 		return nil, err
 	}
 
-	queryTrainings := fmt.Sprintf("SELECT id, id_workout, name, approaches, repetitions, weight FROM %s", trainingsTable)
+	queryTrainings := fmt.Sprintf("SELECT id, id_workout, name, approaches, repetitions, weight FROM %s", activityTable)
 	err = r.db.Select(&trainingsList, queryTrainings)
 	if err != nil {
 		return nil, err
@@ -60,8 +60,8 @@ func (r *WorkoutsListPostgres) GetWorkoutsByParam(id int, interval string) ([]sc
 	mergetWorkouts := make([]schemas.Workout, 0)
 	for _, valueWorkouts := range workoutsList {
 		for _, valueTrainings := range trainingsList {
-			if valueWorkouts.Id == valueTrainings.IdWorkout {
-				valueWorkouts.TrainList = append(valueWorkouts.TrainList, valueTrainings)
+			if valueWorkouts.ID == valueTrainings.IDWorkout {
+				valueWorkouts.ActivityList = append(valueWorkouts.ActivityList, valueTrainings)
 			}
 		}
 		mergetWorkouts = append(mergetWorkouts, valueWorkouts)

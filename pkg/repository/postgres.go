@@ -10,14 +10,14 @@ import (
 const (
 	usersTable      = "users"
 	workoutsTable   = "workouts"
-	trainingsTable  = "trainings"
+	activityTable   = "activity"
 	nutritionsTable = "nutritions"
 	foodsTable      = "foods"
 )
 
 func NewPostgresDB(cfg configs.Config) (*sqlx.DB, error) {
 	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
-		cfg.Db.Host, cfg.Db.Port, cfg.Db.Username, cfg.Db.DBName, cfg.Db.Password, cfg.Db.SSLMode))
+		cfg.DB.Host, cfg.DB.Port, cfg.DB.Username, cfg.DB.DBName, cfg.DB.Password, cfg.DB.SSLMode))
 	if err != nil {
 		return nil, err
 	}

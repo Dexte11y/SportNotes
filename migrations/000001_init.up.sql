@@ -14,7 +14,7 @@ CREATE TABLE workouts (
   created_at DATE
 );
 
-CREATE TABLE trainings (
+CREATE TABLE activity (
   id SERIAL PRIMARY KEY,
   id_workout INT references workouts(id) on delete cascade not null,
   name VARCHAR(50),
