@@ -8,6 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary CreateUser
+// @Description Create user account
+// @ID create-account
+// @Accept  json
+// @Produce  json
+// @Param input body schemas.User true "Create user account"
+// @Success 200 {object} schemas.User.ID
+// @Router /api/users [post]
 func (h *Handler) createUser(c *gin.Context) {
 	var input schemas.User
 	if err := c.BindJSON(&input); err != nil {

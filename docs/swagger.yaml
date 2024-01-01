@@ -1,0 +1,47 @@
+definitions:
+  schemas.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      login:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      surname:
+        type: string
+    required:
+    - email
+    - login
+    - name
+    - password
+    - surname
+    type: object
+info:
+  contact: {}
+paths:
+  /api/users:
+    post:
+      consumes:
+      - application/json
+      description: Create user account
+      operationId: create-account
+      parameters:
+      - description: какое то описание
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.User'
+      summary: CreateUser
+swagger: "2.0"
