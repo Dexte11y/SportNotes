@@ -6,18 +6,7 @@ import (
 	"sportnotes/pkg/repository"
 )
 
-//go:generate mockgen -source=service.go -destination=mocks/mock.go
-
-// type Authorisation interface {
-// 	CreateDoctor(doctor sportnotes.Doctor) (int, error)
-// 	GenerateToken(login, password string) (string, error)
-// 	ParseToken(token string) (int, error)
-// }
-
-// type DoctorList interface {
-// 	GetAll() ([]sportnotes.Doctor, error)
-// 	GetById(id int) (sportnotes.Doctor, error)
-// }
+// mockgen --source=service.go --destination=mocks/mock.go
 
 type FoodList interface {
 	CreateFood(food schemas.Food) (int, error)
@@ -73,7 +62,5 @@ func NewService(repo *repository.Repository) *Service {
 		ActivityList:  NewActivityListService(repo.ActivityList),
 		WorkoutList:   NewWorkoutsListService(repo.WorkoutList),
 		UserList:      NewUsersListService(repo.UserList),
-
-		// Authorisation: NewAuthService(repo.Authorisation),
 	}
 }
