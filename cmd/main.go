@@ -2,32 +2,28 @@ package main
 
 import (
 	"context"
+	"log"
 	"os"
 	"os/signal"
-	"sportnotes"
 	"sportnotes/configs"
-	"sportnotes/pkg/handler"
-	"sportnotes/pkg/repository"
-	"sportnotes/pkg/service"
+	sportnotes "sportnotes/internal/app"
+	"sportnotes/internal/handler"
+	"sportnotes/internal/repository"
+	"sportnotes/internal/service"
 	"syscall"
 
-	"github.com/ilyakaznacheev/cleanenv"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	var cfg configs.Config
-	logrus.SetFormatter(new(logrus.JSONFormatter))
-
-	if err := cleanenv.ReadConfig("configs/config.yml", &cfg); err != nil {
-		logrus.Fatalf("error loading config file:%s", err.Error())
+	// logrus.SetFormatter(new(logrus.JSONFormatter))
+	err := configs.LoadEnvironment()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	if err := godotenv.Load(); err != nil {
-		logrus.Fatalf("error loading env variables:%s", err.Error())
-	}
+	cfg := configs.ReadConfig()
 
 	db, err := repository.NewPostgresDB(cfg)
 	if err != nil {
